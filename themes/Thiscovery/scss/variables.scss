@@ -1,0 +1,17 @@
+/**
+ * Thiscovery theme variables for HumHub.
+ */
+
+$baseTheme: "HumHub";
+
+// Let HumHub topbar styles load, then override in _theme.scss.
+
+$primary: #1d70b8 !default;
+$accent: #003078 !default;
+$secondary: #505a5f !default;
+$success: #00703c !default;
+$danger: #d4351c !default;
+$warning: #f47738 !default;
+$info: #1d70b8 !default;
+$light: #f3f2f1 !default;
+$dark: #0b0c0c !default;

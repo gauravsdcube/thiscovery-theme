@@ -1,0 +1,9 @@
+# Site-specific generated SCSS (rebuilt when config is saved)
+themes/Thiscovery/scss/config-generated-root.scss
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

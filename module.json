@@ -1,0 +1,26 @@
+{
+  "id": "thiscovery-theme",
+  "name": "Thiscovery Theme",
+  "description": "Configure and apply a Thiscovery visual theme with colours, layout, typography, top navigation, custom CSS, and JSON export/import.",
+  "keywords": [
+    "theme",
+    "design",
+    "branding",
+    "thiscovery"
+  ],
+  "version": "1.0.0",
+  "humhub": {
+    "minVersion": "1.18.0"
+  },
+  "homepage": "https://dcubeconsulting.co.uk",
+  "license": "Proprietary",
+  "copyright": "Copyright (c) D Cube Consulting Ltd. All rights reserved.",
+  "authors": [
+    {
+      "name": "D Cube Consulting Ltd",
+      "email": "info@dcubeconsulting.co.uk",
+      "homepage": "https://dcubeconsulting.co.uk",
+      "role": "Maintainer"
+    }
+  ]
+}
