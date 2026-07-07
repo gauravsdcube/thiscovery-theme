@@ -82,8 +82,10 @@
         white-space: nowrap;
     }
 
-    #top-menu-nav > li > a i {
-        display: none;
+    @include media-breakpoint-up(md) {
+        #top-menu-nav > li > a i {
+            display: none;
+        }
     }
 
     #top-menu-nav > li > a.active {
@@ -176,6 +178,86 @@
     .dropdown-toggle::after {
         display: none;
     }
+
+}
+
+@include media-breakpoint-up(md) {
+    #topbar > .container > .topbar-actions .account .user-title {
+        display: none !important;
+    }
+}
+
+// Desktop: keep horizontal top navigation even when hamburger mode is enabled for mobile.
+body.hh-yg-mobile-menu-hamburger,
+body.hh-yg-mobile-menu-floating-bar {
+    @include media-breakpoint-up(md) {
+        .top-menu-hamburger {
+            display: none !important;
+        }
+
+        .top-menu-mobile-account-slot {
+            display: none !important;
+        }
+
+        #topbar > .container {
+            > .topbar-actions {
+                display: flex !important;
+            }
+
+            .top-menu-floating-bar,
+            #top-menu-mobile-panel {
+                display: contents !important;
+            }
+
+            #top-menu-nav {
+                display: flex !important;
+                flex: 1 1 auto !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                align-items: stretch !important;
+                justify-content: var(--yg-topbar-justify-content) !important;
+                min-width: 0 !important;
+                width: auto !important;
+                height: 100% !important;
+                margin: 0 12px !important;
+                padding: 0 !important;
+
+                > li {
+                    width: auto !important;
+                    margin: 0 !important;
+                    text-align: center !important;
+
+                    > a {
+                        flex-direction: row !important;
+                        justify-content: center !important;
+                        align-items: center !important;
+                        gap: 0 !important;
+                        height: 100% !important;
+                        min-height: 0 !important;
+                        padding: 0 12px !important;
+                        white-space: nowrap !important;
+                        text-transform: var(--yg-top-menu-text-transform, uppercase) !important;
+                        font-size: var(--yg-topbar-font-size) !important;
+                        letter-spacing: var(--yg-top-menu-letter-spacing, 0.03em) !important;
+                        border-bottom: 0 !important;
+                        box-shadow: none !important;
+
+                        br {
+                            display: none !important;
+                        }
+
+                        i {
+                            display: none !important;
+                        }
+                    }
+                }
+            }
+
+            #top-menu-sub {
+                display: none !important;
+            }
+        }
+    }
 }
 
 .footer-nav {
@@ -191,6 +273,20 @@
 
     a:hover {
         color: $primary;
+    }
+}
+
+// Stream and panel content should use Typography settings on desktop.
+@include media-breakpoint-up(md) {
+    .panel .panel-body,
+    .wall-entry,
+    .wall-entry .panel-body,
+    .layout-content-container .panel-body,
+    .wall-entry [data-ui-richtext] {
+        font-family: var(--yg-font-family) !important;
+        font-size: var(--yg-font-size) !important;
+        font-weight: var(--yg-font-weight) !important;
+        color: var(--yg-card-text);
     }
 }
 
@@ -219,9 +315,17 @@ form {
 
 .panel-profile {
     .panel-profile-header {
-        div.img-profile-header-background,
         .profile-user-photo {
             border-radius: 50% !important;
+        }
+
+        .img-profile-data {
+            pointer-events: none;
+
+            a,
+            button {
+                pointer-events: auto;
+            }
         }
 
         .profile-user-photo-container {
@@ -232,3 +336,28 @@ form {
         }
     }
 }
+
+@include media-breakpoint-up(md) {
+    .panel-profile .panel-profile-header {
+        .image-upload-container {
+            .image-upload-buttons {
+                z-index: 6;
+                display: flex;
+                gap: 4px;
+            }
+        }
+
+        .profile-banner-image-container {
+            .img-profile-header-background {
+                display: block;
+                width: 100%;
+                height: 192px;
+                min-height: 192px;
+                max-height: 192px;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+    }
+}
+

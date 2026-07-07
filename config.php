@@ -12,4 +12,11 @@ return [
     'id' => 'thiscovery-theme',
     'class' => Module::class,
     'namespace' => 'humhub\modules\thiscoveryTheme',
+    'events' => [
+        [
+            'class' => \humhub\components\View::class,
+            'event' => \humhub\components\View::EVENT_BEFORE_RENDER,
+            'callback' => [\humhub\modules\thiscoveryTheme\Events::class, 'onViewBeforeRender'],
+        ],
+    ],
 ];

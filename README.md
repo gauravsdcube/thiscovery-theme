@@ -1,6 +1,6 @@
 # HumHub Thiscovery Theme Module
 
-**Version 1.0.0**
+**Version 2.0.0**
 
 Copyright (c) D Cube Consulting Ltd. All rights reserved.
 
@@ -15,6 +15,12 @@ Configurable Thiscovery branding for HumHub: colours, layout, typography, top na
 - **Page & content** — backgrounds, panel borders, shadows, radius
 - **Forms, cards, tables, lists, sidebar, footer** — granular styling
 - **Custom CSS rules** — selector/declaration pairs with descriptions
+- **Mobile navigation** — hamburger menu, Clean Theme bottom bar, or floating bottom navigation
+- **Floating bottom bar** — icons and labels in a pill at the bottom; configurable colour and opacity
+- **Profile banners** — 1962×192 px crop; 192 px desktop display height
+- **Danger badge colours** — separate settings for notification counts and red badges
+- **Button colours** — primary, secondary, light, and default buttons
+- **Custom CSS validation** — catches invalid CSS before save
 - **Export / import** — share theme JSON between environments
 
 ## Requirements

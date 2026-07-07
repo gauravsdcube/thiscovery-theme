@@ -1,0 +1,11 @@
+body.hh-yg-mobile-menu-bottom-bar {
+    @include media-breakpoint-down(sm) {
+        padding-bottom: calc(var(--hh-fixed-footer-height, 52px) + var(--hh-mobile-app-safe-area-inset-bottom, env(safe-area-inset-bottom)));
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    body.hh-yg-mobile-menu-bottom-bar.hide-bottom-menu {
+        padding-bottom: var(--hh-mobile-app-safe-area-inset-bottom, env(safe-area-inset-bottom));
+    }
+}

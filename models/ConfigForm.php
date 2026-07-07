@@ -10,6 +10,8 @@ namespace humhub\modules\thiscoveryTheme\models;
 
 use humhub\components\SettingsManager;
 use humhub\modules\thiscoveryTheme\Module;
+use ScssPhp\ScssPhp\Compiler;
+use ScssPhp\ScssPhp\Exception\SassException;
 use Yii;
 use yii\base\Model;
 
@@ -18,6 +20,11 @@ class ConfigForm extends Model
     public const TOP_BAR_HEIGHT_SM = 50;
     public const TOP_BAR_BOTTOM_SPACING = 12;
     public const TOP_BAR_BOTTOM_SPACING_SM = 6;
+    public const BOTTOM_BAR_HEIGHT_SM = 50;
+    public const FLOATING_BAR_HEIGHT_SM = 76;
+    public const MOBILE_MENU_STYLE_HAMBURGER = 'hamburger';
+    public const MOBILE_MENU_STYLE_BOTTOM_BAR = 'bottom-bar';
+    public const MOBILE_MENU_STYLE_FLOATING_BAR = 'floating-bar';
     public const EXPORT_FORMAT = 'thiscovery-theme';
     public const EXPORT_VERSION = 1;
 
@@ -69,6 +76,25 @@ class ConfigForm extends Model
         'sideMenuItemActiveBackgroundColor',
         'footerBackgroundColor',
         'footerTextColor',
+        'bottomMenuBackgroundColor',
+        'bottomMenuTextColor',
+        'floatingMenuBackgroundColor',
+        'floatingMenuTextColor',
+        'floatingMenuActiveColor',
+        'mobileMenuBackgroundColor',
+        'mobileMenuTextColor',
+        'dangerBadgeBackgroundColor',
+        'dangerBadgeTextColor',
+        'buttonBackgroundColor',
+        'buttonTextColor',
+        'buttonBorderColor',
+        'buttonHoverBackgroundColor',
+        'buttonHoverTextColor',
+        'buttonSecondaryBackgroundColor',
+        'buttonSecondaryTextColor',
+        'buttonSecondaryBorderColor',
+        'buttonSecondaryHoverBackgroundColor',
+        'buttonSecondaryHoverTextColor',
     ];
 
     private const EXPORTABLE_ATTRIBUTES = [
@@ -154,6 +180,39 @@ class ConfigForm extends Model
         'sideMenuItemBorderRadius',
         'footerBackgroundColor',
         'footerTextColor',
+        'mobileMenuStyle',
+        'bottomMenuBackgroundColor',
+        'bottomMenuTextColor',
+        'floatingMenuBackgroundColor',
+        'floatingMenuTextColor',
+        'floatingMenuActiveColor',
+        'floatingMenuBackgroundOpacity',
+        'hideFloatingMenuItemLabels',
+        'hideTextInBottomMenuItems',
+        'mobileMenuBackgroundColor',
+        'mobileMenuTextColor',
+        'mobileMenuFontSize',
+        'mobileMenuHighlightActive',
+        'mobileMenuItemPaddingX',
+        'mobileMenuItemPaddingY',
+        'mobileContentPaddingX',
+        'mobileContentPaddingY',
+        'mobileContentGutter',
+        'mobilePanelSpacing',
+        'mobilePanelBodyPadding',
+        'mobileTopbarPaddingX',
+        'dangerBadgeBackgroundColor',
+        'dangerBadgeTextColor',
+        'buttonBackgroundColor',
+        'buttonTextColor',
+        'buttonBorderColor',
+        'buttonHoverBackgroundColor',
+        'buttonHoverTextColor',
+        'buttonSecondaryBackgroundColor',
+        'buttonSecondaryTextColor',
+        'buttonSecondaryBorderColor',
+        'buttonSecondaryHoverBackgroundColor',
+        'buttonSecondaryHoverTextColor',
         'customCssRules',
     ];
 
@@ -241,6 +300,39 @@ class ConfigForm extends Model
     public int|string|null $sideMenuItemBorderRadius = null;
     public ?string $footerBackgroundColor = null;
     public ?string $footerTextColor = null;
+    public ?string $mobileMenuStyle = null;
+    public ?string $bottomMenuBackgroundColor = null;
+    public ?string $bottomMenuTextColor = null;
+    public ?string $floatingMenuBackgroundColor = null;
+    public ?string $floatingMenuTextColor = null;
+    public ?string $floatingMenuActiveColor = null;
+    public int|string|null $floatingMenuBackgroundOpacity = null;
+    public string|bool|null $hideFloatingMenuItemLabels = null;
+    public string|bool|null $hideTextInBottomMenuItems = null;
+    public ?string $mobileMenuBackgroundColor = null;
+    public ?string $mobileMenuTextColor = null;
+    public int|string|null $mobileMenuFontSize = null;
+    public string|bool|null $mobileMenuHighlightActive = null;
+    public int|string|null $mobileMenuItemPaddingX = null;
+    public int|string|null $mobileMenuItemPaddingY = null;
+    public int|string|null $mobileContentPaddingX = null;
+    public int|string|null $mobileContentPaddingY = null;
+    public int|string|null $mobileContentGutter = null;
+    public int|string|null $mobilePanelSpacing = null;
+    public int|string|null $mobilePanelBodyPadding = null;
+    public int|string|null $mobileTopbarPaddingX = null;
+    public ?string $dangerBadgeBackgroundColor = null;
+    public ?string $dangerBadgeTextColor = null;
+    public ?string $buttonBackgroundColor = null;
+    public ?string $buttonTextColor = null;
+    public ?string $buttonBorderColor = null;
+    public ?string $buttonHoverBackgroundColor = null;
+    public ?string $buttonHoverTextColor = null;
+    public ?string $buttonSecondaryBackgroundColor = null;
+    public ?string $buttonSecondaryTextColor = null;
+    public ?string $buttonSecondaryBorderColor = null;
+    public ?string $buttonSecondaryHoverBackgroundColor = null;
+    public ?string $buttonSecondaryHoverTextColor = null;
     public array $customCssRules = [];
 
     public function init()
@@ -333,6 +425,39 @@ class ConfigForm extends Model
         $this->sideMenuItemBorderRadius = (int)$this->settings->get('sideMenuItemBorderRadius', 4);
         $this->footerBackgroundColor = $this->settings->get('footerBackgroundColor', '#f3f2f1');
         $this->footerTextColor = $this->settings->get('footerTextColor', '#0b0c0c');
+        $this->mobileMenuStyle = $this->settings->get('mobileMenuStyle', self::MOBILE_MENU_STYLE_HAMBURGER);
+        $this->bottomMenuBackgroundColor = $this->settings->get('bottomMenuBackgroundColor', '#0b0c0c');
+        $this->bottomMenuTextColor = $this->settings->get('bottomMenuTextColor', '#ffffff');
+        $this->floatingMenuBackgroundColor = $this->settings->get('floatingMenuBackgroundColor', '#ffffff');
+        $this->floatingMenuTextColor = $this->settings->get('floatingMenuTextColor', '#262626');
+        $this->floatingMenuActiveColor = $this->settings->get('floatingMenuActiveColor', '#1d70b8');
+        $this->floatingMenuBackgroundOpacity = (int)$this->settings->get('floatingMenuBackgroundOpacity', 92);
+        $this->hideFloatingMenuItemLabels = (bool)$this->settings->get('hideFloatingMenuItemLabels', false);
+        $this->hideTextInBottomMenuItems = (bool)$this->settings->get('hideTextInBottomMenuItems', false);
+        $this->mobileMenuBackgroundColor = $this->settings->get('mobileMenuBackgroundColor', '#0b0c0c');
+        $this->mobileMenuTextColor = $this->settings->get('mobileMenuTextColor', '#ffffff');
+        $this->mobileMenuFontSize = (int)$this->settings->get('mobileMenuFontSize', 16);
+        $this->mobileMenuHighlightActive = (bool)$this->settings->get('mobileMenuHighlightActive', false);
+        $this->mobileMenuItemPaddingX = (int)$this->settings->get('mobileMenuItemPaddingX', 16);
+        $this->mobileMenuItemPaddingY = (int)$this->settings->get('mobileMenuItemPaddingY', 14);
+        $this->mobileContentPaddingX = (int)$this->settings->get('mobileContentPaddingX', 12);
+        $this->mobileContentPaddingY = (int)$this->settings->get('mobileContentPaddingY', 8);
+        $this->mobileContentGutter = (int)$this->settings->get('mobileContentGutter', 12);
+        $this->mobilePanelSpacing = (int)$this->settings->get('mobilePanelSpacing', 12);
+        $this->mobilePanelBodyPadding = (int)$this->settings->get('mobilePanelBodyPadding', 16);
+        $this->mobileTopbarPaddingX = (int)$this->settings->get('mobileTopbarPaddingX', 12);
+        $this->dangerBadgeBackgroundColor = $this->settings->get('dangerBadgeBackgroundColor', '#d4351c');
+        $this->dangerBadgeTextColor = $this->settings->get('dangerBadgeTextColor', '#ffffff');
+        $this->buttonBackgroundColor = $this->settings->get('buttonBackgroundColor', '#1d70b8');
+        $this->buttonTextColor = $this->settings->get('buttonTextColor', '#ffffff');
+        $this->buttonBorderColor = $this->settings->get('buttonBorderColor', '#1d70b8');
+        $this->buttonHoverBackgroundColor = $this->settings->get('buttonHoverBackgroundColor', '#003078');
+        $this->buttonHoverTextColor = $this->settings->get('buttonHoverTextColor', '#ffffff');
+        $this->buttonSecondaryBackgroundColor = $this->settings->get('buttonSecondaryBackgroundColor', '#f3f2f1');
+        $this->buttonSecondaryTextColor = $this->settings->get('buttonSecondaryTextColor', '#0b0c0c');
+        $this->buttonSecondaryBorderColor = $this->settings->get('buttonSecondaryBorderColor', '#b1b4b6');
+        $this->buttonSecondaryHoverBackgroundColor = $this->settings->get('buttonSecondaryHoverBackgroundColor', '#e5e5e5');
+        $this->buttonSecondaryHoverTextColor = $this->settings->get('buttonSecondaryHoverTextColor', '#0b0c0c');
         $this->loadCustomCssRulesFromSettings();
     }
 
@@ -518,6 +643,12 @@ class ConfigForm extends Model
             [['buttonFontWeight'], 'integer', 'min' => 100, 'max' => 900],
             [['topMenuFontWeight'], 'integer', 'min' => 100, 'max' => 900],
             [['topMenuNavJustifyContent'], 'in', 'range' => array_keys(self::getJustifyContentOptions())],
+            [['mobileMenuStyle'], 'in', 'range' => array_keys(self::getMobileMenuStyleOptions())],
+            [['floatingMenuBackgroundOpacity'], 'integer', 'min' => 0, 'max' => 100],
+            [['hideFloatingMenuItemLabels', 'hideTextInBottomMenuItems', 'mobileMenuHighlightActive'], 'boolean'],
+            [['mobileMenuFontSize'], 'integer', 'min' => 12, 'max' => 24],
+            [['mobileMenuItemPaddingX', 'mobileMenuItemPaddingY'], 'integer', 'min' => 0, 'max' => 40],
+            [['mobileContentPaddingX', 'mobileContentPaddingY', 'mobileContentGutter', 'mobilePanelSpacing', 'mobilePanelBodyPadding', 'mobileTopbarPaddingX'], 'integer', 'min' => 0, 'max' => 40],
             [['topMenuTextTransform'], 'in', 'range' => array_keys(self::getTopMenuTextTransformOptions())],
             [['topMenuFontStyle'], 'in', 'range' => array_keys(self::getTopMenuFontStyleOptions())],
             [['topMenuLetterSpacing'], 'match', 'pattern' => '/^(normal|-?[0-9]+(\.[0-9]+)?(em|px|rem)?)$/i', 'message' => Yii::t('ThiscoveryThemeModule.base', 'Use normal, or a value such as 0.03em or 1px.')],
@@ -546,6 +677,33 @@ class ConfigForm extends Model
 
             if (str_contains($selector, '{') || str_contains($selector, '}')) {
                 $this->addError('customCssRules', Yii::t('ThiscoveryThemeModule.base', 'Custom CSS selector #{n} must not include curly braces.', ['n' => $idx + 1]));
+                continue;
+            }
+
+            if (preg_match('/^\s*[a-z][a-z0-9-]*\s+[a-z]/i', $declarations)) {
+                $this->addError(
+                    'customCssRules',
+                    Yii::t(
+                        'ThiscoveryThemeModule.base',
+                        'Custom CSS rule #{n} looks invalid. CSS property names must use hyphens, for example background-color (not "background color").',
+                        ['n' => $idx + 1],
+                    ),
+                );
+                continue;
+            }
+
+            try {
+                (new Compiler())->compileString($this->renderCustomCssRulesScssFromRules([$rule]));
+            } catch (SassException $e) {
+                $message = trim(preg_replace('/\s+/', ' ', $e->getMessage()) ?? $e->getMessage());
+                $this->addError(
+                    'customCssRules',
+                    Yii::t(
+                        'ThiscoveryThemeModule.base',
+                        'Custom CSS rule #{n} could not be compiled: {error}',
+                        ['n' => $idx + 1, 'error' => $message],
+                    ),
+                );
             }
         }
     }
@@ -636,6 +794,15 @@ class ConfigForm extends Model
         ];
     }
 
+    public static function getMobileMenuStyleOptions(): array
+    {
+        return [
+            self::MOBILE_MENU_STYLE_HAMBURGER => Yii::t('ThiscoveryThemeModule.base', 'Top hamburger menu'),
+            self::MOBILE_MENU_STYLE_BOTTOM_BAR => Yii::t('ThiscoveryThemeModule.base', 'Clean Theme bottom navigation bar'),
+            self::MOBILE_MENU_STYLE_FLOATING_BAR => Yii::t('ThiscoveryThemeModule.base', 'Floating bottom navigation'),
+        ];
+    }
+
     public function attributeLabels(): array
     {
         return [
@@ -721,6 +888,39 @@ class ConfigForm extends Model
             'sideMenuItemBorderRadius' => Yii::t('ThiscoveryThemeModule.base', 'Side menu item border radius'),
             'footerBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Footer background color'),
             'footerTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Footer text color'),
+            'mobileMenuStyle' => Yii::t('ThiscoveryThemeModule.base', 'Mobile navigation style'),
+            'bottomMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Bottom menu background color'),
+            'bottomMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Bottom menu text color'),
+            'floatingMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar background color'),
+            'floatingMenuBackgroundOpacity' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar background opacity (0–100)'),
+            'floatingMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar text color'),
+            'floatingMenuActiveColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar active item color'),
+            'hideFloatingMenuItemLabels' => Yii::t('ThiscoveryThemeModule.base', 'Hide floating bar item labels (icons only)'),
+            'hideTextInBottomMenuItems' => Yii::t('ThiscoveryThemeModule.base', 'Hide Clean Theme bottom bar item labels (icons only)'),
+            'mobileMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel background color'),
+            'mobileMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel text color'),
+            'mobileMenuFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu font size'),
+            'mobileMenuHighlightActive' => Yii::t('ThiscoveryThemeModule.base', 'Highlight active item in hamburger menu'),
+            'mobileMenuItemPaddingX' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger item horizontal padding'),
+            'mobileMenuItemPaddingY' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger item vertical padding'),
+            'mobileContentPaddingX' => Yii::t('ThiscoveryThemeModule.base', 'Mobile content horizontal padding'),
+            'mobileContentPaddingY' => Yii::t('ThiscoveryThemeModule.base', 'Mobile content top padding'),
+            'mobileContentGutter' => Yii::t('ThiscoveryThemeModule.base', 'Mobile column gutter'),
+            'mobilePanelSpacing' => Yii::t('ThiscoveryThemeModule.base', 'Mobile spacing between panels'),
+            'mobilePanelBodyPadding' => Yii::t('ThiscoveryThemeModule.base', 'Mobile panel inner padding'),
+            'mobileTopbarPaddingX' => Yii::t('ThiscoveryThemeModule.base', 'Mobile top bar horizontal padding'),
+            'dangerBadgeBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Danger badge background color'),
+            'dangerBadgeTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Danger badge text color'),
+            'buttonBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Primary button background color'),
+            'buttonTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Primary button text color'),
+            'buttonBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Primary button border color'),
+            'buttonHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Primary button hover background color'),
+            'buttonHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Primary button hover text color'),
+            'buttonSecondaryBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button background color'),
+            'buttonSecondaryTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button text color'),
+            'buttonSecondaryBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button border color'),
+            'buttonSecondaryHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover background color'),
+            'buttonSecondaryHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover text color'),
         ];
     }
 
@@ -812,6 +1012,39 @@ class ConfigForm extends Model
         $this->settings->set('sideMenuItemBorderRadius', $this->sideMenuItemBorderRadius);
         $this->settings->set('footerBackgroundColor', $this->footerBackgroundColor);
         $this->settings->set('footerTextColor', $this->footerTextColor);
+        $this->settings->set('mobileMenuStyle', $this->mobileMenuStyle);
+        $this->settings->set('bottomMenuBackgroundColor', $this->bottomMenuBackgroundColor);
+        $this->settings->set('bottomMenuTextColor', $this->bottomMenuTextColor);
+        $this->settings->set('floatingMenuBackgroundColor', $this->floatingMenuBackgroundColor);
+        $this->settings->set('floatingMenuTextColor', $this->floatingMenuTextColor);
+        $this->settings->set('floatingMenuActiveColor', $this->floatingMenuActiveColor);
+        $this->settings->set('floatingMenuBackgroundOpacity', (int)$this->floatingMenuBackgroundOpacity);
+        $this->settings->set('hideFloatingMenuItemLabels', (bool)$this->hideFloatingMenuItemLabels);
+        $this->settings->set('hideTextInBottomMenuItems', (bool)$this->hideTextInBottomMenuItems);
+        $this->settings->set('mobileMenuBackgroundColor', $this->mobileMenuBackgroundColor);
+        $this->settings->set('mobileMenuTextColor', $this->mobileMenuTextColor);
+        $this->settings->set('mobileMenuFontSize', $this->mobileMenuFontSize);
+        $this->settings->set('mobileMenuHighlightActive', (bool)$this->mobileMenuHighlightActive);
+        $this->settings->set('mobileMenuItemPaddingX', $this->mobileMenuItemPaddingX);
+        $this->settings->set('mobileMenuItemPaddingY', $this->mobileMenuItemPaddingY);
+        $this->settings->set('mobileContentPaddingX', $this->mobileContentPaddingX);
+        $this->settings->set('mobileContentPaddingY', $this->mobileContentPaddingY);
+        $this->settings->set('mobileContentGutter', $this->mobileContentGutter);
+        $this->settings->set('mobilePanelSpacing', $this->mobilePanelSpacing);
+        $this->settings->set('mobilePanelBodyPadding', $this->mobilePanelBodyPadding);
+        $this->settings->set('mobileTopbarPaddingX', $this->mobileTopbarPaddingX);
+        $this->settings->set('dangerBadgeBackgroundColor', $this->dangerBadgeBackgroundColor);
+        $this->settings->set('dangerBadgeTextColor', $this->dangerBadgeTextColor);
+        $this->settings->set('buttonBackgroundColor', $this->buttonBackgroundColor);
+        $this->settings->set('buttonTextColor', $this->buttonTextColor);
+        $this->settings->set('buttonBorderColor', $this->buttonBorderColor);
+        $this->settings->set('buttonHoverBackgroundColor', $this->buttonHoverBackgroundColor);
+        $this->settings->set('buttonHoverTextColor', $this->buttonHoverTextColor);
+        $this->settings->set('buttonSecondaryBackgroundColor', $this->buttonSecondaryBackgroundColor);
+        $this->settings->set('buttonSecondaryTextColor', $this->buttonSecondaryTextColor);
+        $this->settings->set('buttonSecondaryBorderColor', $this->buttonSecondaryBorderColor);
+        $this->settings->set('buttonSecondaryHoverBackgroundColor', $this->buttonSecondaryHoverBackgroundColor);
+        $this->settings->set('buttonSecondaryHoverTextColor', $this->buttonSecondaryHoverTextColor);
         $this->settings->setSerialized('customCssRules', $this->customCssRules);
 
         // Persist in global design settings used by ThemeHelper build process.
@@ -931,6 +1164,37 @@ class ConfigForm extends Model
             . '    --hh-background-color-main: ' . $this->backgroundColorMain . ';' . PHP_EOL
             . '    --hh-background-color-page: ' . $this->backgroundColorPage . ';' . PHP_EOL
             . '    --hh-fixed-header-height: ' . ((int)$this->topBarHeight + self::TOP_BAR_BOTTOM_SPACING) . 'px;' . PHP_EOL
+            . '    --hh-fixed-footer-height: 0px;' . PHP_EOL
+            . '    --yg-bottom-menu-bg: ' . $this->bottomMenuBackgroundColor . ';' . PHP_EOL
+            . '    --yg-bottom-menu-text: ' . $this->bottomMenuTextColor . ';' . PHP_EOL
+            . '    --yg-floating-menu-bg: ' . $this->floatingMenuBackgroundColor . ';' . PHP_EOL
+            . '    --yg-floating-menu-bg-opacity: ' . max(0, min(100, (int)$this->floatingMenuBackgroundOpacity)) . '%;' . PHP_EOL
+            . '    --yg-floating-menu-bg-rgba: ' . $this->formatFloatingMenuBackgroundRgba() . ';' . PHP_EOL
+            . '    --yg-floating-menu-text: ' . $this->floatingMenuTextColor . ';' . PHP_EOL
+            . '    --yg-floating-menu-active: ' . $this->floatingMenuActiveColor . ';' . PHP_EOL
+            . '    --yg-mobile-menu-bg: ' . $this->mobileMenuBackgroundColor . ';' . PHP_EOL
+            . '    --yg-mobile-menu-text: ' . $this->mobileMenuTextColor . ';' . PHP_EOL
+            . '    --yg-mobile-menu-font-size: ' . (int)$this->mobileMenuFontSize . 'px;' . PHP_EOL
+            . '    --yg-mobile-menu-item-padding-x: ' . (int)$this->mobileMenuItemPaddingX . 'px;' . PHP_EOL
+            . '    --yg-mobile-menu-item-padding-y: ' . (int)$this->mobileMenuItemPaddingY . 'px;' . PHP_EOL
+            . '    --yg-mobile-content-padding-x: ' . (int)$this->mobileContentPaddingX . 'px;' . PHP_EOL
+            . '    --yg-mobile-content-padding-y: ' . (int)$this->mobileContentPaddingY . 'px;' . PHP_EOL
+            . '    --yg-mobile-content-gutter: ' . (int)$this->mobileContentGutter . 'px;' . PHP_EOL
+            . '    --yg-mobile-panel-spacing: ' . (int)$this->mobilePanelSpacing . 'px;' . PHP_EOL
+            . '    --yg-mobile-panel-body-padding: ' . (int)$this->mobilePanelBodyPadding . 'px;' . PHP_EOL
+            . '    --yg-mobile-topbar-padding-x: ' . (int)$this->mobileTopbarPaddingX . 'px;' . PHP_EOL
+            . '    --yg-danger-badge-bg: ' . $this->dangerBadgeBackgroundColor . ';' . PHP_EOL
+            . '    --yg-danger-badge-text: ' . $this->dangerBadgeTextColor . ';' . PHP_EOL
+            . '    --yg-button-bg: ' . $this->buttonBackgroundColor . ';' . PHP_EOL
+            . '    --yg-button-text: ' . $this->buttonTextColor . ';' . PHP_EOL
+            . '    --yg-button-border: ' . $this->buttonBorderColor . ';' . PHP_EOL
+            . '    --yg-button-hover-bg: ' . $this->buttonHoverBackgroundColor . ';' . PHP_EOL
+            . '    --yg-button-hover-text: ' . $this->buttonHoverTextColor . ';' . PHP_EOL
+            . '    --yg-button-secondary-bg: ' . $this->buttonSecondaryBackgroundColor . ';' . PHP_EOL
+            . '    --yg-button-secondary-text: ' . $this->buttonSecondaryTextColor . ';' . PHP_EOL
+            . '    --yg-button-secondary-border: ' . $this->buttonSecondaryBorderColor . ';' . PHP_EOL
+            . '    --yg-button-secondary-hover-bg: ' . $this->buttonSecondaryHoverBackgroundColor . ';' . PHP_EOL
+            . '    --yg-button-secondary-hover-text: ' . $this->buttonSecondaryHoverTextColor . ';' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'body {' . PHP_EOL
             . '    font-family: var(--yg-font-family);' . PHP_EOL
@@ -973,12 +1237,75 @@ class ConfigForm extends Model
             . '    box-shadow: var(--yg-panel-shadow);' . PHP_EOL
             . '    background: var(--yg-card-bg);' . PHP_EOL
             . '    color: var(--yg-card-text);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.panel {' . PHP_EOL
+            . '    padding: 0;' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.panel .panel-body,' . PHP_EOL
+            . '.wall-entry .panel-body,' . PHP_EOL
+            . '.layout-content-container .panel-body {' . PHP_EOL
+            . '    font-family: var(--yg-font-family);' . PHP_EOL
+            . '    font-size: var(--yg-font-size);' . PHP_EOL
+            . '    font-weight: var(--yg-font-weight);' . PHP_EOL
+            . '    color: var(--yg-card-text);' . PHP_EOL
             . '    padding: var(--yg-card-padding);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.card {' . PHP_EOL
+            . '    padding: var(--yg-card-padding);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.badge {' . PHP_EOL
+            . '    font-family: var(--yg-font-family);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.badge.text-bg-danger,' . PHP_EOL
+            . '.badge.bg-danger,' . PHP_EOL
+            . '#badge-notifications,' . PHP_EOL
+            . '#badge-messages,' . PHP_EOL
+            . '.badge.messageCount,' . PHP_EOL
+            . '.badge.badge-notifications {' . PHP_EOL
+            . '    background-color: var(--yg-danger-badge-bg) !important;' . PHP_EOL
+            . '    color: var(--yg-danger-badge-text) !important;' . PHP_EOL
             . '}' . PHP_EOL
             . '.btn {' . PHP_EOL
             . '    border-radius: var(--yg-button-radius);' . PHP_EOL
             . '    padding: var(--yg-button-padding-y) var(--yg-button-padding-x);' . PHP_EOL
             . '    font-weight: var(--yg-button-font-weight);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.btn-primary {' . PHP_EOL
+            . '    --bs-btn-bg: var(--yg-button-bg);' . PHP_EOL
+            . '    --bs-btn-border-color: var(--yg-button-border);' . PHP_EOL
+            . '    --bs-btn-color: var(--yg-button-text);' . PHP_EOL
+            . '    --bs-btn-hover-bg: var(--yg-button-hover-bg);' . PHP_EOL
+            . '    --bs-btn-hover-border-color: var(--yg-button-hover-bg);' . PHP_EOL
+            . '    --bs-btn-hover-color: var(--yg-button-hover-text);' . PHP_EOL
+            . '    --bs-btn-active-bg: var(--yg-button-hover-bg);' . PHP_EOL
+            . '    --bs-btn-active-border-color: var(--yg-button-hover-bg);' . PHP_EOL
+            . '    --bs-btn-active-color: var(--yg-button-hover-text);' . PHP_EOL
+            . '    --bs-btn-disabled-bg: var(--yg-button-bg);' . PHP_EOL
+            . '    --bs-btn-disabled-border-color: var(--yg-button-border);' . PHP_EOL
+            . '    --bs-btn-disabled-color: var(--yg-button-text);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.btn-secondary,' . PHP_EOL
+            . '.btn-light {' . PHP_EOL
+            . '    --bs-btn-bg: var(--yg-button-secondary-bg);' . PHP_EOL
+            . '    --bs-btn-border-color: var(--yg-button-secondary-border);' . PHP_EOL
+            . '    --bs-btn-color: var(--yg-button-secondary-text);' . PHP_EOL
+            . '    --bs-btn-hover-bg: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    --bs-btn-hover-border-color: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    --bs-btn-hover-color: var(--yg-button-secondary-hover-text);' . PHP_EOL
+            . '    --bs-btn-active-bg: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    --bs-btn-active-border-color: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    --bs-btn-active-color: var(--yg-button-secondary-hover-text);' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.btn-default {' . PHP_EOL
+            . '    background: var(--yg-button-secondary-bg);' . PHP_EOL
+            . '    border-color: var(--yg-button-secondary-border);' . PHP_EOL
+            . '    color: var(--yg-button-secondary-text) !important;' . PHP_EOL
+            . '}' . PHP_EOL
+            . '.btn-default:hover,' . PHP_EOL
+            . '.btn-default:focus {' . PHP_EOL
+            . '    background: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    border-color: var(--yg-button-secondary-hover-bg);' . PHP_EOL
+            . '    color: var(--yg-button-secondary-hover-text) !important;' . PHP_EOL
             . '}' . PHP_EOL
             . '.form-control, .form-select {' . PHP_EOL
             . '    background: var(--yg-input-bg);' . PHP_EOL
@@ -1043,6 +1370,14 @@ class ConfigForm extends Model
             . '        --yg-topbar-height: ' . self::TOP_BAR_HEIGHT_SM . 'px;' . PHP_EOL
             . '        --hh-fixed-header-height: ' . (self::TOP_BAR_HEIGHT_SM + self::TOP_BAR_BOTTOM_SPACING_SM) . 'px;' . PHP_EOL
             . '    }' . PHP_EOL
+            . '    body.hh-yg-mobile-menu-floating-bar {' . PHP_EOL
+            . '        --hh-fixed-footer-height: ' . (self::FLOATING_BAR_HEIGHT_SM + 2) . 'px;' . PHP_EOL
+            . '    }' . PHP_EOL
+            . '}' . PHP_EOL
+            . '@media (max-width: 575.98px) {' . PHP_EOL
+            . '    body.hh-yg-mobile-menu-bottom-bar {' . PHP_EOL
+            . '        --hh-fixed-footer-height: ' . (self::BOTTOM_BAR_HEIGHT_SM + 2) . 'px;' . PHP_EOL
+            . '    }' . PHP_EOL
             . '}' . PHP_EOL
             . $endMarker;
 
@@ -1062,8 +1397,16 @@ class ConfigForm extends Model
 
     private function renderCustomCssRulesScss(): string
     {
+        return $this->renderCustomCssRulesScssFromRules($this->customCssRules);
+    }
+
+    /**
+     * @param array<int, array{description?: string, selector?: string, declarations?: string}> $rules
+     */
+    private function renderCustomCssRulesScssFromRules(array $rules): string
+    {
         $scss = '';
-        foreach ($this->customCssRules as $rule) {
+        foreach ($rules as $rule) {
             $selector = trim((string)($rule['selector'] ?? ''));
             $declarations = trim((string)($rule['declarations'] ?? ''));
             if ($selector === '' || $declarations === '') {
@@ -1073,6 +1416,7 @@ class ConfigForm extends Model
             $scss .= $declarations . PHP_EOL;
             $scss .= '}' . PHP_EOL;
         }
+
         return $scss;
     }
 
@@ -1112,5 +1456,20 @@ class ConfigForm extends Model
         }
 
         return $normalized;
+    }
+
+    private function formatFloatingMenuBackgroundRgba(): string
+    {
+        $hex = ltrim((string)$this->floatingMenuBackgroundColor, '#');
+        if (!preg_match('/^[a-f0-9]{6}$/i', $hex)) {
+            return 'rgba(255, 255, 255, 0.92)';
+        }
+
+        $red = hexdec(substr($hex, 0, 2));
+        $green = hexdec(substr($hex, 2, 2));
+        $blue = hexdec(substr($hex, 4, 2));
+        $alpha = max(0, min(100, (int)$this->floatingMenuBackgroundOpacity)) / 100;
+
+        return sprintf('rgba(%d, %d, %d, %.2f)', $red, $green, $blue, $alpha);
     }
 }

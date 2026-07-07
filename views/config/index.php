@@ -68,6 +68,12 @@ $hasCustomCssRules = !empty($model->customCssRules);
             <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'themeLightColor']) ?></div>
             <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'themeDarkColor']) ?></div>
         </div>
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Danger badges') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Notification counts and other red badges. Separate from the general danger brand colour.') ?></p>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'dangerBadgeBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'dangerBadgeTextColor']) ?></div>
+        </div>
         <?= $form->endCollapsibleFields() ?>
 
         <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Layout & top header')) ?>
@@ -86,6 +92,63 @@ $hasCustomCssRules = !empty($model->customCssRules);
         <div class="row">
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'topMenuButtonHoverBackgroundColor']) ?></div>
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'topMenuButtonHoverTextColor']) ?></div>
+        </div>
+        <?= $form->endCollapsibleFields() ?>
+
+        <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Mobile settings')) ?>
+        <div class="row">
+            <div class="col-md-8"><?= $form->field($model, 'mobileMenuStyle')->dropDownList(ConfigForm::getMobileMenuStyleOptions()) ?></div>
+        </div>
+        <p class="text-body-secondary mb-3">
+            <?= Yii::t('ThiscoveryThemeModule.base', 'Choose how navigation appears on phones and small tablets. Desktop navigation is unchanged.') ?>
+        </p>
+
+        <h6 class="mb-2"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Top hamburger menu” is selected. Main links appear at the top-left; profile and account links appear at the bottom.') ?></p>
+        <div class="row">
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'mobileMenuBackgroundColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'mobileMenuTextColor']) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileMenuFontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 12, 'max' => 24]) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"><?= $form->field($model, 'mobileMenuItemPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileMenuItemPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileMenuHighlightActive')->checkbox() ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Mobile content layout') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Spacing for dashboard, spaces, streams, and other pages on phones and small tablets.') ?></p>
+        <div class="row">
+            <div class="col-md-4"><?= $form->field($model, 'mobileTopbarPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentGutter')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobilePanelSpacing')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobilePanelBodyPadding')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Floating bottom navigation') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Floating bottom navigation” is selected. Main links appear in a floating bar at the bottom with icons and labels. Search, notifications, and messages stay in the top bar; account links open from the hamburger menu.') ?></p>
+        <div class="row">
+            <div class="col-md-3"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'floatingMenuBackgroundColor']) ?></div>
+            <div class="col-md-3"><?= $form->field($model, 'floatingMenuBackgroundOpacity')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 100]) ?></div>
+            <div class="col-md-3"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'floatingMenuTextColor']) ?></div>
+            <div class="col-md-3"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'floatingMenuActiveColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><?= $form->field($model, 'hideFloatingMenuItemLabels')->checkbox() ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Clean Theme bottom bar') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Clean Theme bottom navigation bar” is selected.') ?></p>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'bottomMenuBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'bottomMenuTextColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><?= $form->field($model, 'hideTextInBottomMenuItems')->checkbox() ?></div>
         </div>
         <?= $form->endCollapsibleFields() ?>
 
@@ -153,11 +216,35 @@ $hasCustomCssRules = !empty($model->customCssRules);
         <?= $form->endCollapsibleFields() ?>
 
         <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Forms & buttons')) ?>
+        <h6 class="mb-2"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Primary buttons') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Colours for main action buttons (Save, Submit, etc.).') ?></p>
+        <div class="row">
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonBackgroundColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonTextColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonBorderColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonHoverBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonHoverTextColor']) ?></div>
+        </div>
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Secondary buttons') ?></strong></h6>
+        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Colours for secondary, light, and default buttons.') ?></p>
+        <div class="row">
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonSecondaryBackgroundColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonSecondaryTextColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonSecondaryBorderColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonSecondaryHoverBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'buttonSecondaryHoverTextColor']) ?></div>
+        </div>
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Button sizing') ?></strong></h6>
         <div class="row">
             <div class="col-md-4"><?= $form->field($model, 'buttonPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
             <div class="col-md-4"><?= $form->field($model, 'buttonPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
             <div class="col-md-4"><?= $form->field($model, 'buttonFontWeight')->textInput(['type' => 'number', 'step' => 100, 'min' => 100, 'max' => 900]) ?></div>
         </div>
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Form fields') ?></strong></h6>
         <div class="row">
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'inputBackgroundColor']) ?></div>
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'inputTextColor']) ?></div>
