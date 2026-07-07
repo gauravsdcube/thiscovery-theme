@@ -6,14 +6,11 @@
  * @license Proprietary
  */
 
-use humhub\assets\TopNavigationAsset;
 use humhub\helpers\Html;
 
 /* @var $this \humhub\components\View */
 /* @var $menu \humhub\widgets\TopMenu */
 /* @var $entries \humhub\modules\ui\menu\MenuEntry[] */
-
-TopNavigationAsset::register($this);
 
 ?>
 
@@ -26,7 +23,7 @@ TopNavigationAsset::register($this);
         $options['class'] = trim('nav-link ' . ($entry->getIsActive() ? 'active ' : '') . $class);
         ?>
         <?= Html::a(
-            $entry->getLabel(),
+            $entry->getIcon() . '<br />' . $entry->getLabel(),
             $entry->getUrl(),
             $options,
         ) ?>

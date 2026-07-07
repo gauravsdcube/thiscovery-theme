@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.0.0 — 2026-07-07
+
+Major update with mobile navigation overhaul, floating bottom bar, and admin improvements.
+
+### Features
+
+- **Floating bottom navigation** — pill-style bar at the bottom with icons and labels; search, notifications, and messages stay in the top bar
+- **Mobile menu styles** — hamburger, Clean Theme bottom bar, or floating bottom navigation (configurable)
+- **Custom top navigation JS** — replaces HumHub `TopNavigationAsset` when the Thiscovery theme is active
+- **Profile banner crop** — 1962×192 px upload crop; 192 px desktop display height
+- **Danger badge colours** — separate admin settings for notification/badge styling
+- **Button colours** — primary, secondary, light, and default button styling in admin
+- **Custom CSS validation** — invalid declarations (e.g. `background color`) are caught before save
+- **Desktop stream typography** — stream content uses configured typography settings
+
+### Fixes
+
+- Floating bar visibility and label layout (CSS specificity)
+- Topbar utilities (search/notifications) preserved on mobile
+- Dropdown menus readable on white backgrounds
+- Space header stats and notification badge clipping
+- Mobile hamburger gap and header height alignment
+- Banner upload buttons on desktop (hover + z-index)
+
 ## 1.0.0 — 2026-07-07
 
 Initial release.
