@@ -47,7 +47,12 @@ class ConfigController extends Controller
                         return $this->refresh();
                     }
                 } else {
-                    $this->view->error(Yii::t('ThiscoveryThemeModule.base', 'Could not save theme settings.'));
+                    $message = Yii::t('ThiscoveryThemeModule.base', 'Could not save theme settings.');
+                    $errors = $model->getFirstErrors();
+                    if ($errors !== []) {
+                        $message .= ' ' . implode(' ', $errors);
+                    }
+                    $this->view->error($message);
                 }
             } catch (Throwable $e) {
                 $this->view->error($e->getMessage());

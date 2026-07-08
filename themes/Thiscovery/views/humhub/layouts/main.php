@@ -51,6 +51,7 @@ AppAsset::register($this);
 ThiscoveryTopNavigationAsset::register($this);
 $this->registerJsConfig('thiscoveryTheme.topNavigation', [
     'mobileMenuStyle' => $mobileMenuStyle,
+    'hideFloatingMenuOnScrollDown' => (bool)($module?->settings->get('hideFloatingMenuOnScrollDown', false) ?? false),
 ]);
 ?>
 <?php $this->beginPage() ?>

@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.0 — 2026-07-08
+
+Accordion styling in admin, with fixes for save validation and legacy CSS overrides.
+
+### Features
+
+- **Accordion settings** — configurable FAQ (`.faq-accordion`) and TinyMCE (`details.mce-accordion`) styling in admin
+- **Legacy accordion CSS cleanup** — removes hardcoded accordion rules from pasted custom SCSS on save so settings apply correctly
+
+### Fixes
+
+- Accordion header font weight validation (allowed 100–900, not capped at 100)
+- Theme save errors now show the specific validation message
+
 ## 2.0.0 — 2026-07-07
 
 Major update with mobile navigation overhaul, floating bottom bar, and admin improvements.

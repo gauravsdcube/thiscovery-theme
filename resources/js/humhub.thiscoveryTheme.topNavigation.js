@@ -17,6 +17,7 @@ humhub.module('thiscoveryTheme.topNavigation', function (module, require, $) {
     let notificationsHomeNext = null;
     let chooserHomeParent = null;
     let chooserHomeNext = null;
+    let floatingMenuLastScrollTop = 0;
 
     const getBody = function () {
         return $('body');
@@ -357,9 +358,44 @@ humhub.module('thiscoveryTheme.topNavigation', function (module, require, $) {
         restoreAccountMenu();
     };
 
+    const showFloatingMenu = function () {
+        getBody().removeClass('hide-floating-menu');
+        $(':root').css('--hh-fixed-footer-height', '');
+    };
+
+    const hideFloatingMenuOnScroll = function () {
+        const onScroll = function () {
+            if (!module.config.hideFloatingMenuOnScrollDown || !isFloatingViewport()) {
+                showFloatingMenu();
+                return;
+            }
+
+            const bodyHeightDiffWithWindow = $('body').height() - $(window).height();
+            if (bodyHeightDiffWithWindow <= 0) {
+                return;
+            }
+
+            const scrollTop = Math.max(0, Math.min($(window).scrollTop(), bodyHeightDiffWithWindow));
+
+            if (scrollTop > 10 && scrollTop >= floatingMenuLastScrollTop) {
+                getBody().addClass('hide-floating-menu');
+                $(':root').css('--hh-fixed-footer-height', '0px');
+            } else {
+                showFloatingMenu();
+            }
+
+            floatingMenuLastScrollTop = scrollTop;
+        };
+
+        $(window).on('scroll' + EVENT_NS, onScroll);
+        $(document).on('scroll' + EVENT_NS, onScroll);
+    };
+
     const unbindEvents = function () {
         $(document).off(EVENT_NS);
         $(window).off(EVENT_NS);
+        showFloatingMenu();
+        floatingMenuLastScrollTop = 0;
     };
 
     const bindEvents = function () {
@@ -404,6 +440,8 @@ humhub.module('thiscoveryTheme.topNavigation', function (module, require, $) {
             clearTimeout(module.resizeTimeout);
             module.resizeTimeout = setTimeout(onResize, 250);
         });
+
+        hideFloatingMenuOnScroll();
     };
 
     const onResize = function () {
@@ -411,6 +449,11 @@ humhub.module('thiscoveryTheme.topNavigation', function (module, require, $) {
 
         if (!isMobilePanelViewport()) {
             closeMobileMenu();
+        }
+
+        if (!isFloatingViewport()) {
+            showFloatingMenu();
+            floatingMenuLastScrollTop = 0;
         }
 
         if (isHamburgerViewport() || isFloatingViewport()) {
@@ -425,6 +468,8 @@ humhub.module('thiscoveryTheme.topNavigation', function (module, require, $) {
     const init = function () {
         resetStoredHomes();
         closeMobileMenu();
+        showFloatingMenu();
+        floatingMenuLastScrollTop = 0;
         bindEvents();
         relocateNavigationLayout();
         setTimeout(onResize, 50);

@@ -138,7 +138,8 @@ $hasCustomCssRules = !empty($model->customCssRules);
             <div class="col-md-3"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'floatingMenuActiveColor']) ?></div>
         </div>
         <div class="row">
-            <div class="col-md-12"><?= $form->field($model, 'hideFloatingMenuItemLabels')->checkbox() ?></div>
+            <div class="col-md-6"><?= $form->field($model, 'hideFloatingMenuItemLabels')->checkbox() ?></div>
+            <div class="col-md-6"><?= $form->field($model, 'hideFloatingMenuOnScrollDown')->checkbox() ?></div>
         </div>
 
         <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Clean Theme bottom bar') ?></strong></h6>
@@ -319,6 +320,63 @@ $hasCustomCssRules = !empty($model->customCssRules);
         <div class="row">
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'footerBackgroundColor']) ?></div>
             <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'footerTextColor']) ?></div>
+        </div>
+        <?= $form->endCollapsibleFields() ?>
+
+
+        <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Accordions')) ?>
+        <p class="text-body-secondary">
+            <?= Yii::t('ThiscoveryThemeModule.base', 'Styles FAQ accordions (.faq-accordion) and TinyMCE rich-text accordions (details.mce-accordion) in posts, pages, and streams.') ?>
+        </p>
+
+        <h6 class="mb-2"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Container') ?></strong></h6>
+        <div class="row">
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionBorderColor']) ?></div>
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionBackgroundColor']) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'accordionBorderRadius')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 30]) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><?= $form->field($model, 'accordionMarginBottom')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-6"><?= $form->field($model, 'accordionBoxShadow')->textInput() ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Header (closed state)') ?></strong></h6>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderTextColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><?= $form->field($model, 'accordionHeaderFontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 12, 'max' => 32]) ?></div>
+            <div class="col-md-3"><?= $form->field($model, 'accordionHeaderFontWeight')->textInput(['type' => 'number', 'step' => 100, 'min' => 100, 'max' => 900]) ?></div>
+            <div class="col-md-3"><?= $form->field($model, 'accordionHeaderPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-3"><?= $form->field($model, 'accordionHeaderPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Header hover & open states') ?></strong></h6>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderHoverBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderHoverTextColor']) ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderOpenBackgroundColor']) ?></div>
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionHeaderOpenTextColor']) ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Content area') ?></strong></h6>
+        <div class="row">
+            <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionContentTextColor']) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'accordionContentFontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 12, 'max' => 24]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'accordionContentPadding')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+        </div>
+
+        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'FAQ section title') ?></strong></h6>
+        <div class="row">
+            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'accordionFaqTitleColor']) ?></div>
+            <div class="col-md-6"><?= $form->field($model, 'accordionFaqTitleFontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 16, 'max' => 72]) ?></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12"><?= $form->field($model, 'accordionEnableAnimation')->checkbox() ?></div>
         </div>
         <?= $form->endCollapsibleFields() ?>
 

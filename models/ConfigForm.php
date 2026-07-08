@@ -95,6 +95,16 @@ class ConfigForm extends Model
         'buttonSecondaryBorderColor',
         'buttonSecondaryHoverBackgroundColor',
         'buttonSecondaryHoverTextColor',
+        'accordionBorderColor',
+        'accordionBackgroundColor',
+        'accordionHeaderBackgroundColor',
+        'accordionHeaderTextColor',
+        'accordionHeaderHoverBackgroundColor',
+        'accordionHeaderHoverTextColor',
+        'accordionHeaderOpenBackgroundColor',
+        'accordionHeaderOpenTextColor',
+        'accordionContentTextColor',
+        'accordionFaqTitleColor',
     ];
 
     private const EXPORTABLE_ATTRIBUTES = [
@@ -188,6 +198,7 @@ class ConfigForm extends Model
         'floatingMenuActiveColor',
         'floatingMenuBackgroundOpacity',
         'hideFloatingMenuItemLabels',
+        'hideFloatingMenuOnScrollDown',
         'hideTextInBottomMenuItems',
         'mobileMenuBackgroundColor',
         'mobileMenuTextColor',
@@ -213,6 +224,27 @@ class ConfigForm extends Model
         'buttonSecondaryBorderColor',
         'buttonSecondaryHoverBackgroundColor',
         'buttonSecondaryHoverTextColor',
+        'accordionBorderColor',
+        'accordionBorderRadius',
+        'accordionMarginBottom',
+        'accordionBackgroundColor',
+        'accordionBoxShadow',
+        'accordionHeaderBackgroundColor',
+        'accordionHeaderTextColor',
+        'accordionHeaderFontSize',
+        'accordionHeaderFontWeight',
+        'accordionHeaderPaddingY',
+        'accordionHeaderPaddingX',
+        'accordionHeaderHoverBackgroundColor',
+        'accordionHeaderHoverTextColor',
+        'accordionHeaderOpenBackgroundColor',
+        'accordionHeaderOpenTextColor',
+        'accordionContentTextColor',
+        'accordionContentFontSize',
+        'accordionContentPadding',
+        'accordionFaqTitleColor',
+        'accordionFaqTitleFontSize',
+        'accordionEnableAnimation',
         'customCssRules',
     ];
 
@@ -308,6 +340,7 @@ class ConfigForm extends Model
     public ?string $floatingMenuActiveColor = null;
     public int|string|null $floatingMenuBackgroundOpacity = null;
     public string|bool|null $hideFloatingMenuItemLabels = null;
+    public string|bool|null $hideFloatingMenuOnScrollDown = null;
     public string|bool|null $hideTextInBottomMenuItems = null;
     public ?string $mobileMenuBackgroundColor = null;
     public ?string $mobileMenuTextColor = null;
@@ -333,6 +366,27 @@ class ConfigForm extends Model
     public ?string $buttonSecondaryBorderColor = null;
     public ?string $buttonSecondaryHoverBackgroundColor = null;
     public ?string $buttonSecondaryHoverTextColor = null;
+    public ?string $accordionBorderColor = null;
+    public int|string|null $accordionBorderRadius = null;
+    public int|string|null $accordionMarginBottom = null;
+    public ?string $accordionBackgroundColor = null;
+    public ?string $accordionBoxShadow = null;
+    public ?string $accordionHeaderBackgroundColor = null;
+    public ?string $accordionHeaderTextColor = null;
+    public int|string|null $accordionHeaderFontSize = null;
+    public int|string|null $accordionHeaderFontWeight = null;
+    public int|string|null $accordionHeaderPaddingY = null;
+    public int|string|null $accordionHeaderPaddingX = null;
+    public ?string $accordionHeaderHoverBackgroundColor = null;
+    public ?string $accordionHeaderHoverTextColor = null;
+    public ?string $accordionHeaderOpenBackgroundColor = null;
+    public ?string $accordionHeaderOpenTextColor = null;
+    public ?string $accordionContentTextColor = null;
+    public int|string|null $accordionContentFontSize = null;
+    public int|string|null $accordionContentPadding = null;
+    public ?string $accordionFaqTitleColor = null;
+    public int|string|null $accordionFaqTitleFontSize = null;
+    public string|bool|null $accordionEnableAnimation = null;
     public array $customCssRules = [];
 
     public function init()
@@ -433,6 +487,7 @@ class ConfigForm extends Model
         $this->floatingMenuActiveColor = $this->settings->get('floatingMenuActiveColor', '#1d70b8');
         $this->floatingMenuBackgroundOpacity = (int)$this->settings->get('floatingMenuBackgroundOpacity', 92);
         $this->hideFloatingMenuItemLabels = (bool)$this->settings->get('hideFloatingMenuItemLabels', false);
+        $this->hideFloatingMenuOnScrollDown = (bool)$this->settings->get('hideFloatingMenuOnScrollDown', false);
         $this->hideTextInBottomMenuItems = (bool)$this->settings->get('hideTextInBottomMenuItems', false);
         $this->mobileMenuBackgroundColor = $this->settings->get('mobileMenuBackgroundColor', '#0b0c0c');
         $this->mobileMenuTextColor = $this->settings->get('mobileMenuTextColor', '#ffffff');
@@ -458,6 +513,27 @@ class ConfigForm extends Model
         $this->buttonSecondaryBorderColor = $this->settings->get('buttonSecondaryBorderColor', '#b1b4b6');
         $this->buttonSecondaryHoverBackgroundColor = $this->settings->get('buttonSecondaryHoverBackgroundColor', '#e5e5e5');
         $this->buttonSecondaryHoverTextColor = $this->settings->get('buttonSecondaryHoverTextColor', '#0b0c0c');
+        $this->accordionBorderColor = $this->settings->get('accordionBorderColor', '#e4eaec');
+        $this->accordionBorderRadius = (int)$this->settings->get('accordionBorderRadius', 4);
+        $this->accordionMarginBottom = (int)$this->settings->get('accordionMarginBottom', 12);
+        $this->accordionBackgroundColor = $this->settings->get('accordionBackgroundColor', '#ffffff');
+        $this->accordionBoxShadow = $this->settings->get('accordionBoxShadow', '0 1px 10px rgba(0,0,0,0.1)');
+        $this->accordionHeaderBackgroundColor = $this->settings->get('accordionHeaderBackgroundColor', '#f7f7f7');
+        $this->accordionHeaderTextColor = $this->settings->get('accordionHeaderTextColor', '#3a3c42');
+        $this->accordionHeaderFontSize = (int)$this->settings->get('accordionHeaderFontSize', 18);
+        $this->accordionHeaderFontWeight = (int)$this->settings->get('accordionHeaderFontWeight', 600);
+        $this->accordionHeaderPaddingY = (int)$this->settings->get('accordionHeaderPaddingY', 18);
+        $this->accordionHeaderPaddingX = (int)$this->settings->get('accordionHeaderPaddingX', 20);
+        $this->accordionHeaderHoverBackgroundColor = $this->settings->get('accordionHeaderHoverBackgroundColor', '#f3a5b9');
+        $this->accordionHeaderHoverTextColor = $this->settings->get('accordionHeaderHoverTextColor', '#000000');
+        $this->accordionHeaderOpenBackgroundColor = $this->settings->get('accordionHeaderOpenBackgroundColor', '#dd0031');
+        $this->accordionHeaderOpenTextColor = $this->settings->get('accordionHeaderOpenTextColor', '#ffffff');
+        $this->accordionContentTextColor = $this->settings->get('accordionContentTextColor', '#3a3c42');
+        $this->accordionContentFontSize = (int)$this->settings->get('accordionContentFontSize', 16);
+        $this->accordionContentPadding = (int)$this->settings->get('accordionContentPadding', 20);
+        $this->accordionFaqTitleColor = $this->settings->get('accordionFaqTitleColor', '#dd0031');
+        $this->accordionFaqTitleFontSize = (int)$this->settings->get('accordionFaqTitleFontSize', 38);
+        $this->accordionEnableAnimation = (bool)$this->settings->get('accordionEnableAnimation', true);
         $this->loadCustomCssRulesFromSettings();
     }
 
@@ -645,14 +721,17 @@ class ConfigForm extends Model
             [['topMenuNavJustifyContent'], 'in', 'range' => array_keys(self::getJustifyContentOptions())],
             [['mobileMenuStyle'], 'in', 'range' => array_keys(self::getMobileMenuStyleOptions())],
             [['floatingMenuBackgroundOpacity'], 'integer', 'min' => 0, 'max' => 100],
-            [['hideFloatingMenuItemLabels', 'hideTextInBottomMenuItems', 'mobileMenuHighlightActive'], 'boolean'],
+            [['hideFloatingMenuItemLabels', 'hideFloatingMenuOnScrollDown', 'hideTextInBottomMenuItems', 'mobileMenuHighlightActive'], 'boolean'],
             [['mobileMenuFontSize'], 'integer', 'min' => 12, 'max' => 24],
             [['mobileMenuItemPaddingX', 'mobileMenuItemPaddingY'], 'integer', 'min' => 0, 'max' => 40],
             [['mobileContentPaddingX', 'mobileContentPaddingY', 'mobileContentGutter', 'mobilePanelSpacing', 'mobilePanelBodyPadding', 'mobileTopbarPaddingX'], 'integer', 'min' => 0, 'max' => 40],
             [['topMenuTextTransform'], 'in', 'range' => array_keys(self::getTopMenuTextTransformOptions())],
             [['topMenuFontStyle'], 'in', 'range' => array_keys(self::getTopMenuFontStyleOptions())],
             [['topMenuLetterSpacing'], 'match', 'pattern' => '/^(normal|-?[0-9]+(\.[0-9]+)?(em|px|rem)?)$/i', 'message' => Yii::t('ThiscoveryThemeModule.base', 'Use normal, or a value such as 0.03em or 1px.')],
-            [['fontFamily', 'headingFontFamily', 'panelBoxShadow'], 'string', 'max' => 255],
+            [['fontFamily', 'headingFontFamily', 'panelBoxShadow', 'accordionBoxShadow'], 'string', 'max' => 255],
+            [['accordionBorderRadius', 'accordionMarginBottom', 'accordionHeaderFontSize', 'accordionHeaderPaddingY', 'accordionHeaderPaddingX', 'accordionContentFontSize', 'accordionContentPadding', 'accordionFaqTitleFontSize'], 'integer', 'min' => 0, 'max' => 100],
+            [['accordionHeaderFontWeight'], 'integer', 'min' => 100, 'max' => 900],
+            [['accordionEnableAnimation'], 'boolean'],
             ['customCssRules', 'safe'],
             ['customCssRules', 'validateCustomCssRules'],
             [self::COLOR_ATTRIBUTES, 'match', 'pattern' => '/^#[a-f0-9]{6}$/', 'message' => Yii::t('ThiscoveryThemeModule.base', 'Please enter a hex colour such as #f7f7f7 or f7f7f7.')],
@@ -896,6 +975,7 @@ class ConfigForm extends Model
             'floatingMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar text color'),
             'floatingMenuActiveColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar active item color'),
             'hideFloatingMenuItemLabels' => Yii::t('ThiscoveryThemeModule.base', 'Hide floating bar item labels (icons only)'),
+            'hideFloatingMenuOnScrollDown' => Yii::t('ThiscoveryThemeModule.base', 'Hide floating bar on scroll down'),
             'hideTextInBottomMenuItems' => Yii::t('ThiscoveryThemeModule.base', 'Hide Clean Theme bottom bar item labels (icons only)'),
             'mobileMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel background color'),
             'mobileMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel text color'),
@@ -921,6 +1001,27 @@ class ConfigForm extends Model
             'buttonSecondaryBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button border color'),
             'buttonSecondaryHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover background color'),
             'buttonSecondaryHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover text color'),
+            'accordionBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion border color'),
+            'accordionBorderRadius' => Yii::t('ThiscoveryThemeModule.base', 'Accordion border radius'),
+            'accordionMarginBottom' => Yii::t('ThiscoveryThemeModule.base', 'Accordion spacing below'),
+            'accordionBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion background color'),
+            'accordionBoxShadow' => Yii::t('ThiscoveryThemeModule.base', 'Accordion shadow'),
+            'accordionHeaderBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header background color'),
+            'accordionHeaderTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header text color'),
+            'accordionHeaderFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header font size'),
+            'accordionHeaderFontWeight' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header font weight'),
+            'accordionHeaderPaddingY' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header vertical padding'),
+            'accordionHeaderPaddingX' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header horizontal padding'),
+            'accordionHeaderHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header hover background color'),
+            'accordionHeaderHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header hover text color'),
+            'accordionHeaderOpenBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion open header background color'),
+            'accordionHeaderOpenTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion open header text color'),
+            'accordionContentTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content text color'),
+            'accordionContentFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content font size'),
+            'accordionContentPadding' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content padding'),
+            'accordionFaqTitleColor' => Yii::t('ThiscoveryThemeModule.base', 'FAQ section title color'),
+            'accordionFaqTitleFontSize' => Yii::t('ThiscoveryThemeModule.base', 'FAQ section title font size'),
+            'accordionEnableAnimation' => Yii::t('ThiscoveryThemeModule.base', 'Animate accordion when opening'),
         ];
     }
 
@@ -1020,6 +1121,7 @@ class ConfigForm extends Model
         $this->settings->set('floatingMenuActiveColor', $this->floatingMenuActiveColor);
         $this->settings->set('floatingMenuBackgroundOpacity', (int)$this->floatingMenuBackgroundOpacity);
         $this->settings->set('hideFloatingMenuItemLabels', (bool)$this->hideFloatingMenuItemLabels);
+        $this->settings->set('hideFloatingMenuOnScrollDown', (bool)$this->hideFloatingMenuOnScrollDown);
         $this->settings->set('hideTextInBottomMenuItems', (bool)$this->hideTextInBottomMenuItems);
         $this->settings->set('mobileMenuBackgroundColor', $this->mobileMenuBackgroundColor);
         $this->settings->set('mobileMenuTextColor', $this->mobileMenuTextColor);
@@ -1045,6 +1147,27 @@ class ConfigForm extends Model
         $this->settings->set('buttonSecondaryBorderColor', $this->buttonSecondaryBorderColor);
         $this->settings->set('buttonSecondaryHoverBackgroundColor', $this->buttonSecondaryHoverBackgroundColor);
         $this->settings->set('buttonSecondaryHoverTextColor', $this->buttonSecondaryHoverTextColor);
+        $this->settings->set('accordionBorderColor', $this->accordionBorderColor);
+        $this->settings->set('accordionBorderRadius', $this->accordionBorderRadius);
+        $this->settings->set('accordionMarginBottom', $this->accordionMarginBottom);
+        $this->settings->set('accordionBackgroundColor', $this->accordionBackgroundColor);
+        $this->settings->set('accordionBoxShadow', $this->accordionBoxShadow);
+        $this->settings->set('accordionHeaderBackgroundColor', $this->accordionHeaderBackgroundColor);
+        $this->settings->set('accordionHeaderTextColor', $this->accordionHeaderTextColor);
+        $this->settings->set('accordionHeaderFontSize', $this->accordionHeaderFontSize);
+        $this->settings->set('accordionHeaderFontWeight', $this->accordionHeaderFontWeight);
+        $this->settings->set('accordionHeaderPaddingY', $this->accordionHeaderPaddingY);
+        $this->settings->set('accordionHeaderPaddingX', $this->accordionHeaderPaddingX);
+        $this->settings->set('accordionHeaderHoverBackgroundColor', $this->accordionHeaderHoverBackgroundColor);
+        $this->settings->set('accordionHeaderHoverTextColor', $this->accordionHeaderHoverTextColor);
+        $this->settings->set('accordionHeaderOpenBackgroundColor', $this->accordionHeaderOpenBackgroundColor);
+        $this->settings->set('accordionHeaderOpenTextColor', $this->accordionHeaderOpenTextColor);
+        $this->settings->set('accordionContentTextColor', $this->accordionContentTextColor);
+        $this->settings->set('accordionContentFontSize', $this->accordionContentFontSize);
+        $this->settings->set('accordionContentPadding', $this->accordionContentPadding);
+        $this->settings->set('accordionFaqTitleColor', $this->accordionFaqTitleColor);
+        $this->settings->set('accordionFaqTitleFontSize', $this->accordionFaqTitleFontSize);
+        $this->settings->set('accordionEnableAnimation', (bool)$this->accordionEnableAnimation);
         $this->settings->setSerialized('customCssRules', $this->customCssRules);
 
         // Persist in global design settings used by ThemeHelper build process.
@@ -1195,6 +1318,27 @@ class ConfigForm extends Model
             . '    --yg-button-secondary-border: ' . $this->buttonSecondaryBorderColor . ';' . PHP_EOL
             . '    --yg-button-secondary-hover-bg: ' . $this->buttonSecondaryHoverBackgroundColor . ';' . PHP_EOL
             . '    --yg-button-secondary-hover-text: ' . $this->buttonSecondaryHoverTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-border-color: ' . $this->accordionBorderColor . ';' . PHP_EOL
+            . '    --yg-accordion-border-radius: ' . (int)$this->accordionBorderRadius . 'px;' . PHP_EOL
+            . '    --yg-accordion-margin-bottom: ' . (int)$this->accordionMarginBottom . 'px;' . PHP_EOL
+            . '    --yg-accordion-bg: ' . $this->accordionBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-shadow: ' . $this->accordionBoxShadow . ';' . PHP_EOL
+            . '    --yg-accordion-header-bg: ' . $this->accordionHeaderBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-text: ' . $this->accordionHeaderTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-font-size: ' . (int)$this->accordionHeaderFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-font-weight: ' . (int)$this->accordionHeaderFontWeight . ';' . PHP_EOL
+            . '    --yg-accordion-header-padding-y: ' . (int)$this->accordionHeaderPaddingY . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-padding-x: ' . (int)$this->accordionHeaderPaddingX . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-hover-bg: ' . $this->accordionHeaderHoverBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-hover-text: ' . $this->accordionHeaderHoverTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-open-bg: ' . $this->accordionHeaderOpenBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-open-text: ' . $this->accordionHeaderOpenTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-content-text: ' . $this->accordionContentTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-content-font-size: ' . (int)$this->accordionContentFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-content-padding: ' . (int)$this->accordionContentPadding . 'px;' . PHP_EOL
+            . '    --yg-accordion-faq-title-color: ' . $this->accordionFaqTitleColor . ';' . PHP_EOL
+            . '    --yg-accordion-faq-title-font-size: ' . (int)$this->accordionFaqTitleFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-open-animation: ' . ((bool)$this->accordionEnableAnimation ? 'ygAccordionFadeIn 0.3s ease-in-out' : 'none') . ';' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'body {' . PHP_EOL
             . '    font-family: var(--yg-font-family);' . PHP_EOL
@@ -1391,8 +1535,55 @@ class ConfigForm extends Model
             $customScss = preg_replace($pattern, '', $customScss) ?? $customScss;
         }
         $customScss = trim($customScss);
+        $customScss = $this->stripLegacyAccordionScss($customScss);
         $customScss = ($customScss === '' ? '' : $customScss . PHP_EOL . PHP_EOL) . $generatedScss . PHP_EOL;
         $globalSettings->set('themeCustomScss', $customScss);
+    }
+
+    /**
+     * Remove legacy hardcoded FAQ/TinyMCE accordion CSS from pasted custom SCSS.
+     * Those rules override the configurable accordion styles in _accordions.scss.
+     */
+    private function stripLegacyAccordionScss(string $scss): string
+    {
+        if ($scss === '') {
+            return $scss;
+        }
+
+        $patterns = [
+            '/\/\* FAQ Accordion Styling.*?(?=\/\* Rounded Edges|\/\* Imported compatibility|\z)/s',
+            '/\/\* TinyMCE Accordion Styling.*?(?=\/\* Rounded Edges|\/\* Animation for|\/\* Imported compatibility|\z)/s',
+            '/@keyframes\s+fadeIn\s*\{[^}]*\}/s',
+        ];
+
+        foreach ($patterns as $pattern) {
+            $scss = preg_replace($pattern, '', $scss) ?? $scss;
+        }
+
+        $selectors = [
+            '.faq-accordion',
+            '.faq-title',
+            '.faq-item',
+            '.faq-question',
+            'details.mce-accordion',
+            'body details.mce-accordion',
+            '.layout-content-container details.mce-accordion',
+            '.panel-body details.mce-accordion',
+            '.richtext details.mce-accordion',
+            '.stream-entry details.mce-accordion',
+            '.mce-content-body details.mce-accordion',
+        ];
+
+        foreach ($selectors as $selector) {
+            $pattern = '/' . preg_quote($selector, '/') . '(?:[^{,]*,(?:[^{]+)?)*\s*\{(?:[^{}]*|\{[^{}]*\})*\}/s';
+            $previous = null;
+            while ($previous !== $scss) {
+                $previous = $scss;
+                $scss = preg_replace($pattern, '', $scss) ?? $scss;
+            }
+        }
+
+        return trim(preg_replace("/\n{3,}/", "\n\n", $scss) ?? $scss);
     }
 
     private function renderCustomCssRulesScss(): string

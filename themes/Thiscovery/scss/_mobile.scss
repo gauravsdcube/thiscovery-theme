@@ -624,6 +624,7 @@ body.hh-yg-mobile-menu-floating-bar {
             flex: none !important;
             min-width: 0;
             height: auto;
+            transition: bottom 0.4s ease, opacity 0.4s ease;
         }
 
         #topbar .top-menu-floating-bar #top-menu-nav {
@@ -950,6 +951,18 @@ body.hh-yg-mobile-menu-floating-bar {
 
         #layout-content {
             padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+        }
+
+        &.hide-floating-menu {
+            #topbar .top-menu-floating-bar {
+                bottom: calc(-120px - env(safe-area-inset-bottom, 0px)) !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            #layout-content {
+                padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+            }
         }
 
         &.hh-yg-hide-floating-menu-texts {

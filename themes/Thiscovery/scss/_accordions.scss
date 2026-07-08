@@ -1,0 +1,201 @@
+// FAQ and TinyMCE accordion styling (details/summary).
+
+.faq-accordion {
+    max-width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+.faq-title {
+    color: var(--yg-accordion-faq-title-color) !important;
+    font-size: var(--yg-accordion-faq-title-font-size) !important;
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+    text-align: left !important;
+}
+
+.faq-item,
+details.mce-accordion {
+    border: 1px solid var(--yg-accordion-border-color) !important;
+    border-radius: var(--yg-accordion-border-radius) !important;
+    margin-bottom: var(--yg-accordion-margin-bottom) !important;
+    background-color: var(--yg-accordion-bg) !important;
+    box-shadow: var(--yg-accordion-shadow) !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+}
+
+details.mce-accordion ul {
+    margin-left: 20px !important;
+    padding-left: 20px !important;
+}
+
+.faq-question,
+details.mce-accordion summary {
+    background-color: var(--yg-accordion-header-bg) !important;
+    color: var(--yg-accordion-header-text) !important;
+    font-size: var(--yg-accordion-header-font-size) !important;
+    font-weight: var(--yg-accordion-header-font-weight) !important;
+    padding: var(--yg-accordion-header-padding-y) var(--yg-accordion-header-padding-x) !important;
+    padding-right: calc(var(--yg-accordion-header-padding-x) + 30px) !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    border: none !important;
+    outline: none !important;
+    user-select: none !important;
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    line-height: 1.4 !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    font-family: inherit !important;
+    list-style: none !important;
+}
+
+.faq-question::-webkit-details-marker,
+details.mce-accordion summary::-webkit-details-marker {
+    display: none !important;
+}
+
+details.mce-accordion summary::marker {
+    display: none !important;
+    content: none !important;
+}
+
+.faq-question:hover,
+details.mce-accordion summary:hover {
+    background-color: var(--yg-accordion-header-hover-bg) !important;
+    color: var(--yg-accordion-header-hover-text) !important;
+    text-decoration: none !important;
+}
+
+.faq-item[open] .faq-question,
+details.mce-accordion[open] summary {
+    background-color: var(--yg-accordion-header-open-bg) !important;
+    color: var(--yg-accordion-header-open-text) !important;
+    border-bottom: 1px solid var(--yg-accordion-border-color) !important;
+}
+
+.faq-item[open] .faq-question:hover,
+details.mce-accordion[open] summary:hover {
+    background-color: var(--yg-accordion-header-open-bg) !important;
+    color: var(--yg-accordion-header-open-text) !important;
+}
+
+.faq-question::after,
+details.mce-accordion summary::after {
+    content: "+" !important;
+    position: absolute !important;
+    right: var(--yg-accordion-header-padding-x) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    transition: transform 0.3s ease !important;
+}
+
+.faq-item[open] .faq-question::after,
+details.mce-accordion[open] summary::after {
+    content: "−" !important;
+    transform: translateY(-50%) !important;
+}
+
+details.mce-accordion > p,
+details.mce-accordion > div,
+details.mce-accordion > *:not(summary) {
+    background-color: var(--yg-accordion-bg) !important;
+    padding: var(--yg-accordion-content-padding) !important;
+    margin: 0 !important;
+    border-top: none !important;
+}
+
+details.mce-accordion > *:not(summary):first-of-type {
+    padding-top: var(--yg-accordion-content-padding) !important;
+}
+
+details.mce-accordion > *:not(summary):last-of-type {
+    padding-bottom: var(--yg-accordion-content-padding) !important;
+}
+
+details.mce-accordion p {
+    color: var(--yg-accordion-content-text) !important;
+    font-size: var(--yg-accordion-content-font-size) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1rem !important;
+    text-align: left !important;
+    background-color: transparent !important;
+    padding: 0 var(--yg-accordion-content-padding) !important;
+}
+
+details.mce-accordion p:first-of-type {
+    padding-top: var(--yg-accordion-content-padding) !important;
+}
+
+details.mce-accordion p:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: var(--yg-accordion-content-padding) !important;
+}
+
+details.mce-accordion[open] {
+    animation: var(--yg-accordion-open-animation) !important;
+}
+
+@keyframes ygAccordionFadeIn {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.layout-content-container details.mce-accordion,
+.panel-body details.mce-accordion,
+.richtext details.mce-accordion,
+.stream-entry details.mce-accordion,
+.mce-content-body details.mce-accordion {
+    width: 100% !important;
+    display: block !important;
+    max-width: 100% !important;
+    margin: 20px 0 !important;
+}
+
+.layout-content-container details.mce-accordion summary,
+.panel-body details.mce-accordion summary,
+.richtext details.mce-accordion summary,
+.stream-entry details.mce-accordion summary,
+.mce-content-body details.mce-accordion summary {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-family: inherit !important;
+}
+
+@media (max-width: 767.98px) {
+    .faq-question,
+    details.mce-accordion summary {
+        font-size: calc(var(--yg-accordion-header-font-size) - 2px) !important;
+        padding: 15px 18px !important;
+        padding-right: 50px !important;
+    }
+
+    details.mce-accordion p {
+        font-size: calc(var(--yg-accordion-content-font-size) - 2px) !important;
+        padding: 0 18px !important;
+    }
+
+    details.mce-accordion p:first-of-type {
+        padding-top: 15px !important;
+    }
+
+    details.mce-accordion p:last-child {
+        padding-bottom: 15px !important;
+    }
+
+    details.mce-accordion > p,
+    details.mce-accordion > div,
+    details.mce-accordion > *:not(summary) {
+        padding: 15px 18px !important;
+    }
+}

@@ -14,6 +14,8 @@ class ThiscoveryTopNavigationAsset extends AssetBundle
 {
     public $sourcePath = '@thiscovery-theme/resources';
 
+    public $forceCopy = true;
+
     public $js = [
         'js/humhub.thiscoveryTheme.topNavigation.js',
     ];
