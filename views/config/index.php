@@ -7,14 +7,21 @@ use humhub\widgets\form\ActiveForm;
 
 /* @var ConfigForm $model */
 /* @var ThemeImportForm $importModel */
+/* @var array<int, array{id: string, label: string, group: string}> $topMenuItems */
+/* @var array<int, array{id: string, label: string, group: string}> $accountMenuItems */
 
 $formName = $model->formName();
 $customCssSelectorName = $formName . '[customCssSelector][]';
 $customCssDeclarationsName = $formName . '[customCssDeclarations][]';
 $customCssDescriptionName = $formName . '[customCssDescription][]';
+$hamburgerCustomLinkIdName = $formName . '[hamburgerCustomLinkId][]';
+$hamburgerCustomLinkLabelName = $formName . '[hamburgerCustomLinkLabel][]';
+$hamburgerCustomLinkUrlName = $formName . '[hamburgerCustomLinkUrl][]';
+$hamburgerCustomLinkSortOrderName = $formName . '[hamburgerCustomLinkSortOrder][]';
+$hamburgerCustomLinksSentName = $formName . '[hamburgerCustomLinksSent]';
 $hasCustomCssRules = !empty($model->customCssRules);
 ?>
-<div class="panel panel-default">
+<div class="panel panel-default thiscovery-theme-config">
     <div class="panel-heading">
         <strong><?= Yii::t('ThiscoveryThemeModule.base', 'Thiscovery Theme') ?></strong>
         <div class="text-body-secondary">
@@ -96,15 +103,85 @@ $hasCustomCssRules = !empty($model->customCssRules);
         <?= $form->endCollapsibleFields() ?>
 
         <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Mobile settings')) ?>
+
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Navigation style'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Choose how navigation appears on phones and small tablets. Desktop navigation is unchanged.'),
+            'showDivider' => false,
+        ]) ?>
         <div class="row">
             <div class="col-md-8"><?= $form->field($model, 'mobileMenuStyle')->dropDownList(ConfigForm::getMobileMenuStyleOptions()) ?></div>
         </div>
-        <p class="text-body-secondary mb-3">
-            <?= Yii::t('ThiscoveryThemeModule.base', 'Choose how navigation appears on phones and small tablets. Desktop navigation is unchanged.') ?>
-        </p>
 
-        <h6 class="mb-2"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu') ?></strong></h6>
-        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Top hamburger menu” is selected. Main links appear at the top-left; profile and account links appear at the bottom.') ?></p>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Menu items'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Choose which links appear in the floating bottom bar and which appear in the hamburger menu on mobile. Leave a list empty to use sensible defaults.'),
+        ]) ?>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label"><?= $model->getAttributeLabel('floatingNavMenuItemIds') ?></label>
+                <p class="text-body-secondary small"><?= Yii::t('ThiscoveryThemeModule.base', 'Used with floating bottom navigation. Main navigation links shown in the bar at the bottom of the screen.') ?></p>
+                <?= $this->render('_mobileMenuCheckboxes', [
+                    'model' => $model,
+                    'attribute' => 'floatingNavMenuItemIds',
+                    'orderAttribute' => 'floatingNavMenuItemSortOrder',
+                    'items' => $topMenuItems,
+                ]) ?>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label"><?= $model->getAttributeLabel('hamburgerNavMenuItemIds') ?></label>
+                <p class="text-body-secondary small"><?= Yii::t('ThiscoveryThemeModule.base', 'Main navigation links shown in the hamburger slide-down panel.') ?></p>
+                <?= $this->render('_mobileMenuCheckboxes', [
+                    'model' => $model,
+                    'attribute' => 'hamburgerNavMenuItemIds',
+                    'orderAttribute' => 'hamburgerNavMenuItemSortOrder',
+                    'items' => $topMenuItems,
+                ]) ?>
+            </div>
+        </div>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Custom hamburger links'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Add your own links to the mobile hamburger menu. Use sort order to control where each link appears relative to other hamburger items.'),
+        ]) ?>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <?= $this->render('_hamburgerCustomLinks', [
+                    'model' => $model,
+                    'linkIdName' => $hamburgerCustomLinkIdName,
+                    'linkLabelName' => $hamburgerCustomLinkLabelName,
+                    'linkUrlName' => $hamburgerCustomLinkUrlName,
+                    'linkSortOrderName' => $hamburgerCustomLinkSortOrderName,
+                    'linksSentName' => $hamburgerCustomLinksSentName,
+                ]) ?>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <label class="form-label"><?= $model->getAttributeLabel('hamburgerAccountMenuItemIds') ?></label>
+                <p class="text-body-secondary small"><?= Yii::t('ThiscoveryThemeModule.base', 'Account links shown in the hamburger panel (settings, administration, logout, etc.).') ?></p>
+                <?= $this->render('_mobileMenuCheckboxes', [
+                    'model' => $model,
+                    'attribute' => 'hamburgerAccountMenuItemIds',
+                    'items' => $accountMenuItems,
+                ]) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><?= $form->field($model, 'showProfileInFloatingNav')->checkbox() ?></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'showLegalsInFloatingNav')->checkbox()
+                    ->hint(Yii::t('ThiscoveryThemeModule.base', 'When the Site Footer module is enabled, Legals appears in the hamburger menu by default. Enable this to show it in the floating bottom bar instead.')) ?>
+            </div>
+        </div>
+
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu appearance'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Colours and spacing for the slide-down hamburger panel on mobile.'),
+        ]) ?>
         <div class="row">
             <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'mobileMenuBackgroundColor']) ?></div>
             <div class="col-md-4"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'mobileMenuTextColor']) ?></div>
@@ -116,21 +193,10 @@ $hasCustomCssRules = !empty($model->customCssRules);
             <div class="col-md-4"><?= $form->field($model, 'mobileMenuHighlightActive')->checkbox() ?></div>
         </div>
 
-        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Mobile content layout') ?></strong></h6>
-        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Spacing for dashboard, spaces, streams, and other pages on phones and small tablets.') ?></p>
-        <div class="row">
-            <div class="col-md-4"><?= $form->field($model, 'mobileTopbarPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-        </div>
-        <div class="row">
-            <div class="col-md-4"><?= $form->field($model, 'mobileContentGutter')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-            <div class="col-md-4"><?= $form->field($model, 'mobilePanelSpacing')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-            <div class="col-md-4"><?= $form->field($model, 'mobilePanelBodyPadding')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
-        </div>
-
-        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Floating bottom navigation') ?></strong></h6>
-        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Floating bottom navigation” is selected. Main links appear in a floating bar at the bottom with icons and labels. Search, notifications, and messages stay in the top bar; account links open from the hamburger menu.') ?></p>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Floating bottom navigation'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Used when floating bottom navigation is selected. Main links appear in a floating bar at the bottom. Search, notifications, and messages stay in the top bar.'),
+        ]) ?>
         <div class="row">
             <div class="col-md-3"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'floatingMenuBackgroundColor']) ?></div>
             <div class="col-md-3"><?= $form->field($model, 'floatingMenuBackgroundOpacity')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 100]) ?></div>
@@ -142,18 +208,27 @@ $hasCustomCssRules = !empty($model->customCssRules);
             <div class="col-md-6"><?= $form->field($model, 'hideFloatingMenuOnScrollDown')->checkbox() ?></div>
         </div>
 
-        <h6 class="mb-2 mt-3"><strong><?= Yii::t('ThiscoveryThemeModule.base', 'Clean Theme bottom bar') ?></strong></h6>
-        <p class="text-body-secondary"><?= Yii::t('ThiscoveryThemeModule.base', 'Used when “Clean Theme bottom navigation bar” is selected.') ?></p>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Mobile content layout'),
+            'description' => Yii::t('ThiscoveryThemeModule.base', 'Spacing for dashboard, spaces, streams, and other pages on phones and small tablets.'),
+        ]) ?>
         <div class="row">
-            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'bottomMenuBackgroundColor']) ?></div>
-            <div class="col-md-6"><?= $this->render('_colorField', ['form' => $form, 'model' => $model, 'attribute' => 'bottomMenuTextColor']) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileTopbarPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingX')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentPaddingY')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
         </div>
         <div class="row">
-            <div class="col-md-12"><?= $form->field($model, 'hideTextInBottomMenuItems')->checkbox() ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobileContentGutter')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobilePanelSpacing')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
+            <div class="col-md-4"><?= $form->field($model, 'mobilePanelBodyPadding')->textInput(['type' => 'number', 'step' => 1, 'min' => 0, 'max' => 40]) ?></div>
         </div>
         <?= $form->endCollapsibleFields() ?>
 
         <?= $form->beginCollapsibleFields(Yii::t('ThiscoveryThemeModule.base', 'Typography')) ?>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Base fonts'),
+            'showDivider' => false,
+        ]) ?>
         <div class="row">
             <div class="col-md-6"><?= $form->field($model, 'fontFamily')->textInput() ?></div>
             <div class="col-md-6"><?= $form->field($model, 'headingFontFamily')->textInput() ?></div>
@@ -163,6 +238,9 @@ $hasCustomCssRules = !empty($model->customCssRules);
             <div class="col-md-4"><?= $form->field($model, 'fontWeight')->textInput(['type' => 'number', 'step' => 100, 'min' => 100, 'max' => 900]) ?></div>
             <div class="col-md-4"><?= $form->field($model, 'fontBoldWeight')->textInput(['type' => 'number', 'step' => 100, 'min' => 100, 'max' => 900]) ?></div>
         </div>
+        <?= $this->render('_settingsSubsection', [
+            'title' => Yii::t('ThiscoveryThemeModule.base', 'Heading sizes'),
+        ]) ?>
         <div class="row">
             <div class="col-md-4"><?= $form->field($model, 'h1FontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 12, 'max' => 72]) ?></div>
             <div class="col-md-4"><?= $form->field($model, 'h2FontSize')->textInput(['type' => 'number', 'step' => 1, 'min' => 12, 'max' => 72]) ?></div>
@@ -414,6 +492,62 @@ $this->registerCss(<<<'CSS'
     height: 38px;
     padding: 2px;
     cursor: pointer;
+}
+.tc-settings-divider {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 1.5rem 0 1rem;
+}
+.tc-settings-subheading {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+.tc-menu-item-checkboxes {
+    margin-left: 0;
+}
+.tc-menu-item-checkboxes .tc-menu-item-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-left: 0;
+    min-height: auto;
+}
+.tc-menu-item-checkboxes .form-check-input {
+    float: none;
+    margin-left: 0;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+.tc-menu-item-checkboxes .form-check-label {
+    line-height: 1.4;
+    flex: 1 1 auto;
+}
+.tc-menu-item-checkboxes .tc-sort-order-label {
+    margin: 0.15rem 0 0 0.5rem;
+    white-space: nowrap;
+}
+.tc-menu-item-checkboxes .tc-sort-order-input {
+    width: 72px;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.35rem;
+    height: 30px;
+}
+.thiscovery-theme-config .form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-left: 0;
+    min-height: auto;
+}
+.thiscovery-theme-config .form-check-input {
+    float: none;
+    margin-left: 0;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
 }
 CSS
 );

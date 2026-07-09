@@ -16,6 +16,10 @@ class ThiscoveryTopNavigationAsset extends AssetBundle
 
     public $forceCopy = true;
 
+    public $jsOptions = [
+        'appendTimestamp' => true,
+    ];
+
     public $js = [
         'js/humhub.thiscoveryTheme.topNavigation.js',
     ];

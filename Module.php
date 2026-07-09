@@ -17,7 +17,7 @@ use yii\helpers\Url;
 
 class Module extends \humhub\components\Module
 {
-    public const VERSION = '2.1.0';
+    public const VERSION = '2.3.0';
     public const THEME_NAME = 'Thiscovery';
 
     /**

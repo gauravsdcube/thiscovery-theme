@@ -10,6 +10,7 @@ namespace humhub\modules\thiscoveryTheme;
 
 use humhub\assets\TopNavigationAsset;
 use humhub\components\View;
+use humhub\modules\thiscoveryTheme\models\ConfigForm;
 use humhub\modules\thiscoveryTheme\Module;
 
 class Events
@@ -24,5 +25,6 @@ class Events
         }
 
         unset($view->assetBundles[TopNavigationAsset::class]);
+        $view->registerJsConfig('thiscoveryTheme.topNavigation', ConfigForm::getTopNavigationJsConfig());
     }
 }

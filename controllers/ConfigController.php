@@ -11,6 +11,7 @@ namespace humhub\modules\thiscoveryTheme\controllers;
 use humhub\helpers\ThemeHelper;
 use humhub\modules\admin\components\Controller;
 use humhub\modules\admin\permissions\ManageSettings;
+use humhub\modules\thiscoveryTheme\libs\MobileMenuHelper;
 use humhub\modules\thiscoveryTheme\models\ConfigForm;
 use humhub\modules\thiscoveryTheme\models\ThemeImportForm;
 use Throwable;
@@ -62,6 +63,8 @@ class ConfigController extends Controller
         return $this->render('index', [
             'model' => $model,
             'importModel' => $importModel,
+            'topMenuItems' => MobileMenuHelper::collectConfigurableTopMenuItems(),
+            'accountMenuItems' => MobileMenuHelper::collectAccountMenuItems(),
         ]);
     }
 

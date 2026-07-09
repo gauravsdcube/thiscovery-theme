@@ -227,6 +227,13 @@ body.hh-yg-mobile-menu-floating-bar {
                     margin: 0 !important;
                     text-align: center !important;
 
+                    &.tc-mobile-only-nav-item,
+                    &.top-menu-home-item,
+                    &.top-menu-profile-item,
+                    &.tc-mobile-nav-hidden {
+                        display: none !important;
+                    }
+
                     > a {
                         flex-direction: row !important;
                         justify-content: center !important;
