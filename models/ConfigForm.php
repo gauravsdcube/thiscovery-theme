@@ -9,6 +9,7 @@
 namespace humhub\modules\thiscoveryTheme\models;
 
 use humhub\components\SettingsManager;
+use humhub\modules\thiscoveryTheme\libs\MobileMenuHelper;
 use humhub\modules\thiscoveryTheme\Module;
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Exception\SassException;
@@ -20,10 +21,8 @@ class ConfigForm extends Model
     public const TOP_BAR_HEIGHT_SM = 50;
     public const TOP_BAR_BOTTOM_SPACING = 12;
     public const TOP_BAR_BOTTOM_SPACING_SM = 6;
-    public const BOTTOM_BAR_HEIGHT_SM = 50;
     public const FLOATING_BAR_HEIGHT_SM = 76;
     public const MOBILE_MENU_STYLE_HAMBURGER = 'hamburger';
-    public const MOBILE_MENU_STYLE_BOTTOM_BAR = 'bottom-bar';
     public const MOBILE_MENU_STYLE_FLOATING_BAR = 'floating-bar';
     public const EXPORT_FORMAT = 'thiscovery-theme';
     public const EXPORT_VERSION = 1;
@@ -76,8 +75,6 @@ class ConfigForm extends Model
         'sideMenuItemActiveBackgroundColor',
         'footerBackgroundColor',
         'footerTextColor',
-        'bottomMenuBackgroundColor',
-        'bottomMenuTextColor',
         'floatingMenuBackgroundColor',
         'floatingMenuTextColor',
         'floatingMenuActiveColor',
@@ -95,6 +92,16 @@ class ConfigForm extends Model
         'buttonSecondaryBorderColor',
         'buttonSecondaryHoverBackgroundColor',
         'buttonSecondaryHoverTextColor',
+        'accordionBorderColor',
+        'accordionBackgroundColor',
+        'accordionHeaderBackgroundColor',
+        'accordionHeaderTextColor',
+        'accordionHeaderHoverBackgroundColor',
+        'accordionHeaderHoverTextColor',
+        'accordionHeaderOpenBackgroundColor',
+        'accordionHeaderOpenTextColor',
+        'accordionContentTextColor',
+        'accordionFaqTitleColor',
     ];
 
     private const EXPORTABLE_ATTRIBUTES = [
@@ -181,14 +188,20 @@ class ConfigForm extends Model
         'footerBackgroundColor',
         'footerTextColor',
         'mobileMenuStyle',
-        'bottomMenuBackgroundColor',
-        'bottomMenuTextColor',
+        'floatingNavMenuItemIds',
+        'floatingNavMenuItemSortOrder',
+        'hamburgerNavMenuItemIds',
+        'hamburgerNavMenuItemSortOrder',
+        'hamburgerAccountMenuItemIds',
+        'hamburgerCustomLinks',
+        'showProfileInFloatingNav',
+        'showLegalsInFloatingNav',
         'floatingMenuBackgroundColor',
         'floatingMenuTextColor',
         'floatingMenuActiveColor',
         'floatingMenuBackgroundOpacity',
         'hideFloatingMenuItemLabels',
-        'hideTextInBottomMenuItems',
+        'hideFloatingMenuOnScrollDown',
         'mobileMenuBackgroundColor',
         'mobileMenuTextColor',
         'mobileMenuFontSize',
@@ -213,6 +226,27 @@ class ConfigForm extends Model
         'buttonSecondaryBorderColor',
         'buttonSecondaryHoverBackgroundColor',
         'buttonSecondaryHoverTextColor',
+        'accordionBorderColor',
+        'accordionBorderRadius',
+        'accordionMarginBottom',
+        'accordionBackgroundColor',
+        'accordionBoxShadow',
+        'accordionHeaderBackgroundColor',
+        'accordionHeaderTextColor',
+        'accordionHeaderFontSize',
+        'accordionHeaderFontWeight',
+        'accordionHeaderPaddingY',
+        'accordionHeaderPaddingX',
+        'accordionHeaderHoverBackgroundColor',
+        'accordionHeaderHoverTextColor',
+        'accordionHeaderOpenBackgroundColor',
+        'accordionHeaderOpenTextColor',
+        'accordionContentTextColor',
+        'accordionContentFontSize',
+        'accordionContentPadding',
+        'accordionFaqTitleColor',
+        'accordionFaqTitleFontSize',
+        'accordionEnableAnimation',
         'customCssRules',
     ];
 
@@ -301,14 +335,26 @@ class ConfigForm extends Model
     public ?string $footerBackgroundColor = null;
     public ?string $footerTextColor = null;
     public ?string $mobileMenuStyle = null;
-    public ?string $bottomMenuBackgroundColor = null;
-    public ?string $bottomMenuTextColor = null;
+    /** @var array<int, string> */
+    public array $floatingNavMenuItemIds = [];
+    /** @var array<string, int> */
+    public array $floatingNavMenuItemSortOrder = [];
+    /** @var array<int, string> */
+    public array $hamburgerNavMenuItemIds = [];
+    /** @var array<string, int> */
+    public array $hamburgerNavMenuItemSortOrder = [];
+    /** @var array<int, string> */
+    public array $hamburgerAccountMenuItemIds = [];
+    /** @var array<int, array{id: string, label: string, url: string, sortOrder: int}> */
+    public array $hamburgerCustomLinks = [];
+    public string|bool|null $showProfileInFloatingNav = null;
+    public string|bool|null $showLegalsInFloatingNav = null;
     public ?string $floatingMenuBackgroundColor = null;
     public ?string $floatingMenuTextColor = null;
     public ?string $floatingMenuActiveColor = null;
     public int|string|null $floatingMenuBackgroundOpacity = null;
     public string|bool|null $hideFloatingMenuItemLabels = null;
-    public string|bool|null $hideTextInBottomMenuItems = null;
+    public string|bool|null $hideFloatingMenuOnScrollDown = null;
     public ?string $mobileMenuBackgroundColor = null;
     public ?string $mobileMenuTextColor = null;
     public int|string|null $mobileMenuFontSize = null;
@@ -333,6 +379,27 @@ class ConfigForm extends Model
     public ?string $buttonSecondaryBorderColor = null;
     public ?string $buttonSecondaryHoverBackgroundColor = null;
     public ?string $buttonSecondaryHoverTextColor = null;
+    public ?string $accordionBorderColor = null;
+    public int|string|null $accordionBorderRadius = null;
+    public int|string|null $accordionMarginBottom = null;
+    public ?string $accordionBackgroundColor = null;
+    public ?string $accordionBoxShadow = null;
+    public ?string $accordionHeaderBackgroundColor = null;
+    public ?string $accordionHeaderTextColor = null;
+    public int|string|null $accordionHeaderFontSize = null;
+    public int|string|null $accordionHeaderFontWeight = null;
+    public int|string|null $accordionHeaderPaddingY = null;
+    public int|string|null $accordionHeaderPaddingX = null;
+    public ?string $accordionHeaderHoverBackgroundColor = null;
+    public ?string $accordionHeaderHoverTextColor = null;
+    public ?string $accordionHeaderOpenBackgroundColor = null;
+    public ?string $accordionHeaderOpenTextColor = null;
+    public ?string $accordionContentTextColor = null;
+    public int|string|null $accordionContentFontSize = null;
+    public int|string|null $accordionContentPadding = null;
+    public ?string $accordionFaqTitleColor = null;
+    public int|string|null $accordionFaqTitleFontSize = null;
+    public string|bool|null $accordionEnableAnimation = null;
     public array $customCssRules = [];
 
     public function init()
@@ -426,14 +493,41 @@ class ConfigForm extends Model
         $this->footerBackgroundColor = $this->settings->get('footerBackgroundColor', '#f3f2f1');
         $this->footerTextColor = $this->settings->get('footerTextColor', '#0b0c0c');
         $this->mobileMenuStyle = $this->settings->get('mobileMenuStyle', self::MOBILE_MENU_STYLE_HAMBURGER);
-        $this->bottomMenuBackgroundColor = $this->settings->get('bottomMenuBackgroundColor', '#0b0c0c');
-        $this->bottomMenuTextColor = $this->settings->get('bottomMenuTextColor', '#ffffff');
+        $this->migrateLegacyMobileMenuStyle();
+        $this->floatingNavMenuItemIds = MobileMenuHelper::migrateConfiguredMenuItemIds(
+            $this->normalizeMenuItemIds(
+                (array)$this->settings->getSerialized('floatingNavMenuItemIds', []),
+            ),
+        );
+        $this->hamburgerNavMenuItemIds = MobileMenuHelper::migrateConfiguredMenuItemIds(
+            $this->normalizeMenuItemIds(
+                (array)$this->settings->getSerialized('hamburgerNavMenuItemIds', []),
+            ),
+        );
+        $this->floatingNavMenuItemSortOrder = MobileMenuHelper::migrateMenuItemSortOrder(
+            $this->normalizeMenuItemSortOrder(
+                (array)$this->settings->getSerialized('floatingNavMenuItemSortOrder', []),
+            ),
+        );
+        $this->hamburgerNavMenuItemSortOrder = MobileMenuHelper::migrateMenuItemSortOrder(
+            $this->normalizeMenuItemSortOrder(
+                (array)$this->settings->getSerialized('hamburgerNavMenuItemSortOrder', []),
+            ),
+        );
+        $this->hamburgerAccountMenuItemIds = $this->normalizeMenuItemIds(
+            (array)$this->settings->getSerialized('hamburgerAccountMenuItemIds', []),
+        );
+        $this->hamburgerCustomLinks = MobileMenuHelper::normalizeHamburgerCustomLinks(
+            (array)$this->settings->getSerialized('hamburgerCustomLinks', []),
+        );
+        $this->showProfileInFloatingNav = (bool)$this->settings->get('showProfileInFloatingNav', true);
+        $this->showLegalsInFloatingNav = (bool)$this->settings->get('showLegalsInFloatingNav', false);
         $this->floatingMenuBackgroundColor = $this->settings->get('floatingMenuBackgroundColor', '#ffffff');
         $this->floatingMenuTextColor = $this->settings->get('floatingMenuTextColor', '#262626');
         $this->floatingMenuActiveColor = $this->settings->get('floatingMenuActiveColor', '#1d70b8');
         $this->floatingMenuBackgroundOpacity = (int)$this->settings->get('floatingMenuBackgroundOpacity', 92);
         $this->hideFloatingMenuItemLabels = (bool)$this->settings->get('hideFloatingMenuItemLabels', false);
-        $this->hideTextInBottomMenuItems = (bool)$this->settings->get('hideTextInBottomMenuItems', false);
+        $this->hideFloatingMenuOnScrollDown = (bool)$this->settings->get('hideFloatingMenuOnScrollDown', false);
         $this->mobileMenuBackgroundColor = $this->settings->get('mobileMenuBackgroundColor', '#0b0c0c');
         $this->mobileMenuTextColor = $this->settings->get('mobileMenuTextColor', '#ffffff');
         $this->mobileMenuFontSize = (int)$this->settings->get('mobileMenuFontSize', 16);
@@ -458,6 +552,27 @@ class ConfigForm extends Model
         $this->buttonSecondaryBorderColor = $this->settings->get('buttonSecondaryBorderColor', '#b1b4b6');
         $this->buttonSecondaryHoverBackgroundColor = $this->settings->get('buttonSecondaryHoverBackgroundColor', '#e5e5e5');
         $this->buttonSecondaryHoverTextColor = $this->settings->get('buttonSecondaryHoverTextColor', '#0b0c0c');
+        $this->accordionBorderColor = $this->settings->get('accordionBorderColor', '#e4eaec');
+        $this->accordionBorderRadius = (int)$this->settings->get('accordionBorderRadius', 4);
+        $this->accordionMarginBottom = (int)$this->settings->get('accordionMarginBottom', 12);
+        $this->accordionBackgroundColor = $this->settings->get('accordionBackgroundColor', '#ffffff');
+        $this->accordionBoxShadow = $this->settings->get('accordionBoxShadow', '0 1px 10px rgba(0,0,0,0.1)');
+        $this->accordionHeaderBackgroundColor = $this->settings->get('accordionHeaderBackgroundColor', '#f7f7f7');
+        $this->accordionHeaderTextColor = $this->settings->get('accordionHeaderTextColor', '#3a3c42');
+        $this->accordionHeaderFontSize = (int)$this->settings->get('accordionHeaderFontSize', 18);
+        $this->accordionHeaderFontWeight = (int)$this->settings->get('accordionHeaderFontWeight', 600);
+        $this->accordionHeaderPaddingY = (int)$this->settings->get('accordionHeaderPaddingY', 18);
+        $this->accordionHeaderPaddingX = (int)$this->settings->get('accordionHeaderPaddingX', 20);
+        $this->accordionHeaderHoverBackgroundColor = $this->settings->get('accordionHeaderHoverBackgroundColor', '#f3a5b9');
+        $this->accordionHeaderHoverTextColor = $this->settings->get('accordionHeaderHoverTextColor', '#000000');
+        $this->accordionHeaderOpenBackgroundColor = $this->settings->get('accordionHeaderOpenBackgroundColor', '#dd0031');
+        $this->accordionHeaderOpenTextColor = $this->settings->get('accordionHeaderOpenTextColor', '#ffffff');
+        $this->accordionContentTextColor = $this->settings->get('accordionContentTextColor', '#3a3c42');
+        $this->accordionContentFontSize = (int)$this->settings->get('accordionContentFontSize', 16);
+        $this->accordionContentPadding = (int)$this->settings->get('accordionContentPadding', 20);
+        $this->accordionFaqTitleColor = $this->settings->get('accordionFaqTitleColor', '#dd0031');
+        $this->accordionFaqTitleFontSize = (int)$this->settings->get('accordionFaqTitleFontSize', 38);
+        $this->accordionEnableAnimation = (bool)$this->settings->get('accordionEnableAnimation', true);
         $this->loadCustomCssRulesFromSettings();
     }
 
@@ -511,6 +626,7 @@ class ConfigForm extends Model
         }
 
         $this->topMenuLetterSpacing = self::normalizeLetterSpacing($this->topMenuLetterSpacing);
+        $this->migrateLegacyMobileMenuStyle();
 
         return parent::beforeValidate();
     }
@@ -563,8 +679,21 @@ class ConfigForm extends Model
                 continue;
             }
 
+            if ($attribute === 'hamburgerCustomLinks') {
+                $this->hamburgerCustomLinks = MobileMenuHelper::normalizeHamburgerCustomLinks($settings[$attribute]);
+                continue;
+            }
+
             $this->$attribute = $settings[$attribute];
         }
+
+        $this->migrateLegacyMobileMenuStyle();
+        $this->floatingNavMenuItemIds = $this->normalizeMenuItemIds($this->floatingNavMenuItemIds);
+        $this->hamburgerNavMenuItemIds = $this->normalizeMenuItemIds($this->hamburgerNavMenuItemIds);
+        $this->hamburgerAccountMenuItemIds = $this->normalizeMenuItemIds($this->hamburgerAccountMenuItemIds);
+        $this->hamburgerCustomLinks = MobileMenuHelper::normalizeHamburgerCustomLinks($this->hamburgerCustomLinks);
+        $this->floatingNavMenuItemSortOrder = $this->normalizeMenuItemSortOrder($this->floatingNavMenuItemSortOrder);
+        $this->hamburgerNavMenuItemSortOrder = $this->normalizeMenuItemSortOrder($this->hamburgerNavMenuItemSortOrder);
 
         return $this->validate();
     }
@@ -645,18 +774,76 @@ class ConfigForm extends Model
             [['topMenuNavJustifyContent'], 'in', 'range' => array_keys(self::getJustifyContentOptions())],
             [['mobileMenuStyle'], 'in', 'range' => array_keys(self::getMobileMenuStyleOptions())],
             [['floatingMenuBackgroundOpacity'], 'integer', 'min' => 0, 'max' => 100],
-            [['hideFloatingMenuItemLabels', 'hideTextInBottomMenuItems', 'mobileMenuHighlightActive'], 'boolean'],
+            [['hideFloatingMenuItemLabels', 'hideFloatingMenuOnScrollDown', 'showProfileInFloatingNav', 'showLegalsInFloatingNav', 'mobileMenuHighlightActive'], 'boolean'],
+            [['floatingNavMenuItemIds', 'hamburgerNavMenuItemIds', 'hamburgerAccountMenuItemIds'], 'safe'],
+            [['floatingNavMenuItemSortOrder', 'hamburgerNavMenuItemSortOrder'], 'safe'],
+            [['floatingNavMenuItemIds', 'hamburgerNavMenuItemIds', 'hamburgerAccountMenuItemIds'], 'validateMenuItemIds'],
+            [['floatingNavMenuItemSortOrder', 'hamburgerNavMenuItemSortOrder'], 'validateMenuItemSortOrder'],
             [['mobileMenuFontSize'], 'integer', 'min' => 12, 'max' => 24],
             [['mobileMenuItemPaddingX', 'mobileMenuItemPaddingY'], 'integer', 'min' => 0, 'max' => 40],
             [['mobileContentPaddingX', 'mobileContentPaddingY', 'mobileContentGutter', 'mobilePanelSpacing', 'mobilePanelBodyPadding', 'mobileTopbarPaddingX'], 'integer', 'min' => 0, 'max' => 40],
             [['topMenuTextTransform'], 'in', 'range' => array_keys(self::getTopMenuTextTransformOptions())],
             [['topMenuFontStyle'], 'in', 'range' => array_keys(self::getTopMenuFontStyleOptions())],
             [['topMenuLetterSpacing'], 'match', 'pattern' => '/^(normal|-?[0-9]+(\.[0-9]+)?(em|px|rem)?)$/i', 'message' => Yii::t('ThiscoveryThemeModule.base', 'Use normal, or a value such as 0.03em or 1px.')],
-            [['fontFamily', 'headingFontFamily', 'panelBoxShadow'], 'string', 'max' => 255],
+            [['fontFamily', 'headingFontFamily', 'panelBoxShadow', 'accordionBoxShadow'], 'string', 'max' => 255],
+            [['accordionBorderRadius', 'accordionMarginBottom', 'accordionHeaderFontSize', 'accordionHeaderPaddingY', 'accordionHeaderPaddingX', 'accordionContentFontSize', 'accordionContentPadding', 'accordionFaqTitleFontSize'], 'integer', 'min' => 0, 'max' => 100],
+            [['accordionHeaderFontWeight'], 'integer', 'min' => 100, 'max' => 900],
+            [['accordionEnableAnimation'], 'boolean'],
             ['customCssRules', 'safe'],
             ['customCssRules', 'validateCustomCssRules'],
+            ['hamburgerCustomLinks', 'safe'],
+            ['hamburgerCustomLinks', 'validateHamburgerCustomLinks'],
             [self::COLOR_ATTRIBUTES, 'match', 'pattern' => '/^#[a-f0-9]{6}$/', 'message' => Yii::t('ThiscoveryThemeModule.base', 'Please enter a hex colour such as #f7f7f7 or f7f7f7.')],
         ];
+    }
+
+    public function validateMenuItemIds(string $attribute): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->$attribute = [];
+            return;
+        }
+
+        $ids = $this->normalizeMenuItemIds($this->$attribute);
+        if (in_array($attribute, ['floatingNavMenuItemIds', 'hamburgerNavMenuItemIds'], true)) {
+            $ids = MobileMenuHelper::migrateConfiguredMenuItemIds($ids);
+        }
+
+        $this->$attribute = $ids;
+    }
+
+    public function validateMenuItemSortOrder(string $attribute): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->$attribute = [];
+            return;
+        }
+
+        $this->$attribute = $this->normalizeMenuItemSortOrder($this->$attribute);
+    }
+
+    public function validateHamburgerCustomLinks(): void
+    {
+        $this->hamburgerCustomLinks = MobileMenuHelper::normalizeHamburgerCustomLinks($this->hamburgerCustomLinks);
+
+        foreach ($this->hamburgerCustomLinks as $idx => $link) {
+            $label = trim((string)($link['label'] ?? ''));
+            $url = trim((string)($link['url'] ?? ''));
+
+            if ($label === '') {
+                $this->addError(
+                    'hamburgerCustomLinks',
+                    Yii::t('ThiscoveryThemeModule.base', 'Custom hamburger link #{n} must include a label.', ['n' => $idx + 1]),
+                );
+            }
+
+            if ($url === '') {
+                $this->addError(
+                    'hamburgerCustomLinks',
+                    Yii::t('ThiscoveryThemeModule.base', 'Custom hamburger link #{n} must include a URL.', ['n' => $idx + 1]),
+                );
+            }
+        }
     }
 
     public function validateCustomCssRules(): void
@@ -716,6 +903,38 @@ class ConfigForm extends Model
         $declarations = null;
         $resolvedFormName = $formName ?? $this->formName();
         $formData = is_array($data[$resolvedFormName] ?? null) ? $data[$resolvedFormName] : [];
+
+        if (isset($data[$resolvedFormName]) && is_array($data[$resolvedFormName])) {
+            if (array_key_exists('floatingNavMenuItemIdsSent', $formData)) {
+                $this->floatingNavMenuItemIds = MobileMenuHelper::migrateConfiguredMenuItemIds(
+                    $this->normalizeMenuItemIds((array)($formData['floatingNavMenuItemIds'] ?? [])),
+                );
+                $this->floatingNavMenuItemSortOrder = MobileMenuHelper::migrateMenuItemSortOrder(
+                    $this->normalizeMenuItemSortOrder((array)($formData['floatingNavMenuItemSortOrder'] ?? [])),
+                );
+            }
+
+            if (array_key_exists('hamburgerNavMenuItemIdsSent', $formData)) {
+                $this->hamburgerNavMenuItemIds = MobileMenuHelper::migrateConfiguredMenuItemIds(
+                    $this->normalizeMenuItemIds((array)($formData['hamburgerNavMenuItemIds'] ?? [])),
+                );
+                $this->hamburgerNavMenuItemSortOrder = MobileMenuHelper::migrateMenuItemSortOrder(
+                    $this->normalizeMenuItemSortOrder((array)($formData['hamburgerNavMenuItemSortOrder'] ?? [])),
+                );
+            }
+
+            if (array_key_exists('hamburgerAccountMenuItemIdsSent', $formData)) {
+                $this->hamburgerAccountMenuItemIds = $this->normalizeMenuItemIds(
+                    (array)($formData['hamburgerAccountMenuItemIds'] ?? []),
+                );
+            }
+
+            if (array_key_exists('hamburgerCustomLinksSent', $formData)) {
+                $this->hamburgerCustomLinks = MobileMenuHelper::normalizeHamburgerCustomLinks(
+                    $this->buildHamburgerCustomLinksFromFormData($formData),
+                );
+            }
+        }
 
         if (isset($data['customCssSelector']) || isset($data['customCssDeclarations']) || isset($data['customCssDescription'])) {
             $selectors = $data['customCssSelector'] ?? [];
@@ -798,9 +1017,293 @@ class ConfigForm extends Model
     {
         return [
             self::MOBILE_MENU_STYLE_HAMBURGER => Yii::t('ThiscoveryThemeModule.base', 'Top hamburger menu'),
-            self::MOBILE_MENU_STYLE_BOTTOM_BAR => Yii::t('ThiscoveryThemeModule.base', 'Clean Theme bottom navigation bar'),
             self::MOBILE_MENU_STYLE_FLOATING_BAR => Yii::t('ThiscoveryThemeModule.base', 'Floating bottom navigation'),
         ];
+    }
+
+    public static function getTopNavigationJsConfig(): array
+    {
+        static $cache = null;
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $model = new self();
+        /** @var Module $module */
+        $module = Yii::$app->getModule('thiscovery-theme');
+        $mobileMenuStyle = (string)$module->settings->get('mobileMenuStyle', self::MOBILE_MENU_STYLE_HAMBURGER);
+        if ($mobileMenuStyle === 'bottom-bar') {
+            $mobileMenuStyle = self::MOBILE_MENU_STYLE_FLOATING_BAR;
+        }
+
+        $catalog = MobileMenuHelper::buildMenuItemCatalog();
+
+        $cache = [
+            'mobileMenuStyle' => $mobileMenuStyle,
+            'hideFloatingMenuOnScrollDown' => (bool)$module->settings->get('hideFloatingMenuOnScrollDown', false),
+            'floatingNavMenuItemIds' => $model->getEffectiveFloatingNavMenuItemIds(),
+            'floatingNavMenuItemSortOrder' => $model->floatingNavMenuItemSortOrder,
+            'hamburgerNavMenuItemIds' => $model->getEffectiveHamburgerNavMenuItemIds(),
+            'hamburgerNavMenuItemSortOrder' => $model->getEffectiveHamburgerNavMenuItemSortOrder(),
+            'hamburgerAccountMenuItemIds' => $model->getEffectiveHamburgerAccountMenuItemIds(),
+            'hamburgerCustomLinks' => $model->hamburgerCustomLinks,
+            'showProfileInFloatingNav' => (bool)$module->settings->get('showProfileInFloatingNav', true),
+            'showLegalsInFloatingNav' => (bool)$module->settings->get('showLegalsInFloatingNav', false),
+            'siteFooterLegalsAvailable' => MobileMenuHelper::isSiteFooterLegalsAvailable(),
+            'menuItemIdByUrl' => MobileMenuHelper::buildTopMenuUrlIdMap(),
+            'accountMenuItemIdByUrl' => MobileMenuHelper::buildAccountMenuUrlIdMap(),
+            'menuItemCatalog' => $catalog,
+            'menuItemIdAliases' => MobileMenuHelper::buildMenuItemIdAliasMap(),
+        ];
+
+        return $cache;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getEffectiveFloatingNavMenuItemIds(): array
+    {
+        $ids = $this->floatingNavMenuItemIds !== []
+            ? $this->floatingNavMenuItemIds
+            : MobileMenuHelper::getDefaultFloatingNavItemIds();
+
+        if (!in_array(MobileMenuHelper::ITEM_HOME, $ids, true)) {
+            array_unshift($ids, MobileMenuHelper::ITEM_HOME);
+        }
+
+        return $this->applyMenuItemSortOrder($ids, $this->floatingNavMenuItemSortOrder, true);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getEffectiveHamburgerNavMenuItemIds(): array
+    {
+        if ($this->hamburgerNavMenuItemIds !== []) {
+            $resolved = $this->hamburgerNavMenuItemIds;
+        } elseif ($this->mobileMenuStyle === self::MOBILE_MENU_STYLE_HAMBURGER) {
+            $resolved = [];
+        } else {
+            $topMenuIds = array_map(
+                static fn(array $item): string => $item['id'],
+                MobileMenuHelper::collectConfigurableTopMenuItems(),
+            );
+
+            $resolved = MobileMenuHelper::resolveHamburgerNavItemIds(
+                [],
+                $topMenuIds,
+                $this->getEffectiveFloatingNavMenuItemIds(),
+            );
+        }
+
+        $resolved = $this->appendSiteFooterLegalsToHamburgerIds($resolved);
+        $resolved = $this->appendCustomHamburgerLinksToHamburgerIds($resolved);
+
+        return $this->applyMenuItemSortOrder($resolved, $this->getEffectiveHamburgerNavMenuItemSortOrder());
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function getEffectiveHamburgerNavMenuItemSortOrder(): array
+    {
+        return array_merge(
+            $this->hamburgerNavMenuItemSortOrder,
+            MobileMenuHelper::buildCustomHamburgerLinkSortOrderMap($this->hamburgerCustomLinks),
+        );
+    }
+
+    /**
+     * @param array<int, string> $ids
+     * @return array<int, string>
+     */
+    private function appendCustomHamburgerLinksToHamburgerIds(array $ids): array
+    {
+        foreach (MobileMenuHelper::collectCustomHamburgerLinkIds($this->hamburgerCustomLinks) as $linkId) {
+            if (!in_array($linkId, $ids, true)) {
+                $ids[] = $linkId;
+            }
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param array<string, mixed> $formData
+     * @return array<int, array{id?: string, label?: string, url?: string, sortOrder?: int|string}>
+     */
+    private function buildHamburgerCustomLinksFromFormData(array $formData): array
+    {
+        $ids = (array)($formData['hamburgerCustomLinkId'] ?? []);
+        $labels = (array)($formData['hamburgerCustomLinkLabel'] ?? []);
+        $urls = (array)($formData['hamburgerCustomLinkUrl'] ?? []);
+        $sortOrders = (array)($formData['hamburgerCustomLinkSortOrder'] ?? []);
+        $max = max(count($ids), count($labels), count($urls), count($sortOrders));
+        $links = [];
+
+        for ($i = 0; $i < $max; $i++) {
+            $label = trim((string)($labels[$i] ?? ''));
+            $url = trim((string)($urls[$i] ?? ''));
+            if ($label === '' && $url === '') {
+                continue;
+            }
+
+            $links[] = [
+                'id' => trim((string)($ids[$i] ?? '')),
+                'label' => $label,
+                'url' => $url,
+                'sortOrder' => (int)($sortOrders[$i] ?? 0),
+            ];
+        }
+
+        return $links;
+    }
+
+    /**
+     * @param array<int, string> $ids
+     * @return array<int, string>
+     */
+    private function appendSiteFooterLegalsToHamburgerIds(array $ids): array
+    {
+        if ($this->showLegalsInFloatingNav || !MobileMenuHelper::isSiteFooterLegalsAvailable()) {
+            return $ids;
+        }
+
+        if (in_array(MobileMenuHelper::ITEM_SITE_FOOTER_LEGALS, $ids, true)) {
+            return $ids;
+        }
+
+        $ids[] = MobileMenuHelper::ITEM_SITE_FOOTER_LEGALS;
+
+        return $ids;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getEffectiveHamburgerAccountMenuItemIds(): array
+    {
+        $accountIds = array_map(
+            static fn(array $item): string => $item['id'],
+            MobileMenuHelper::collectAccountMenuItems(),
+        );
+
+        return MobileMenuHelper::resolveHamburgerAccountItemIds(
+            $this->hamburgerAccountMenuItemIds,
+            $accountIds,
+            (bool)$this->showProfileInFloatingNav,
+        );
+    }
+
+    /**
+     * @param array<int, mixed> $ids
+     * @return array<int, string>
+     */
+    public static function normalizeMenuItemIds(array $ids): array
+    {
+        $normalized = [];
+
+        foreach ($ids as $id) {
+            $id = trim((string)$id);
+            if ($id === '' || !preg_match('/^[a-z0-9_-]+$/i', $id)) {
+                continue;
+            }
+
+            if (!in_array($id, $normalized, true)) {
+                $normalized[] = $id;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<string, mixed> $sortOrder
+     * @return array<string, int>
+     */
+    public static function normalizeMenuItemSortOrder(array $sortOrder): array
+    {
+        $normalized = [];
+
+        foreach ($sortOrder as $id => $value) {
+            $menuId = trim((string)$id);
+            if ($menuId === '' || !preg_match('/^[a-z0-9_-]+$/i', $menuId)) {
+                continue;
+            }
+
+            $position = (int)$value;
+            if ($position <= 0) {
+                continue;
+            }
+
+            $normalized[$menuId] = $position;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<string, int> $sortOrder
+     */
+    private function resolveMenuItemSortPosition(string $id, array $sortOrder, int $fallback): int
+    {
+        $canonical = MobileMenuHelper::resolveMenuItemIdAlias($id);
+
+        foreach ([$id, $canonical] as $key) {
+            if (isset($sortOrder[$key])) {
+                return $sortOrder[$key];
+            }
+        }
+
+        foreach ($sortOrder as $key => $position) {
+            if (MobileMenuHelper::resolveMenuItemIdAlias((string)$key) === $canonical) {
+                return (int)$position;
+            }
+        }
+
+        return $fallback;
+    }
+
+    /**
+     * @param array<int, string> $ids
+     * @param array<string, int> $sortOrder
+     * @return array<int, string>
+     */
+    private function applyMenuItemSortOrder(array $ids, array $sortOrder, bool $forceHomeFirst = false): array
+    {
+        $ids = array_values(array_unique($ids));
+        $sortOrder = $this->normalizeMenuItemSortOrder($sortOrder);
+        $originalIndex = array_flip($ids);
+
+        usort($ids, function (string $a, string $b) use ($sortOrder, $originalIndex, $forceHomeFirst): int {
+            if ($forceHomeFirst) {
+                if ($a === MobileMenuHelper::ITEM_HOME && $b !== MobileMenuHelper::ITEM_HOME) {
+                    return -1;
+                }
+                if ($b === MobileMenuHelper::ITEM_HOME && $a !== MobileMenuHelper::ITEM_HOME) {
+                    return 1;
+                }
+            }
+
+            $aSort = $this->resolveMenuItemSortPosition($a, $sortOrder, 1000 + ($originalIndex[$a] ?? 0));
+            $bSort = $this->resolveMenuItemSortPosition($b, $sortOrder, 1000 + ($originalIndex[$b] ?? 0));
+
+            if ($aSort === $bSort) {
+                return ($originalIndex[$a] ?? 0) <=> ($originalIndex[$b] ?? 0);
+            }
+
+            return $aSort <=> $bSort;
+        });
+
+        return $ids;
+    }
+
+    private function migrateLegacyMobileMenuStyle(): void
+    {
+        if ($this->mobileMenuStyle === 'bottom-bar') {
+            $this->mobileMenuStyle = self::MOBILE_MENU_STYLE_FLOATING_BAR;
+        }
     }
 
     public function attributeLabels(): array
@@ -889,14 +1392,20 @@ class ConfigForm extends Model
             'footerBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Footer background color'),
             'footerTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Footer text color'),
             'mobileMenuStyle' => Yii::t('ThiscoveryThemeModule.base', 'Mobile navigation style'),
-            'bottomMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Bottom menu background color'),
-            'bottomMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Bottom menu text color'),
+            'floatingNavMenuItemIds' => Yii::t('ThiscoveryThemeModule.base', 'Floating bottom bar items'),
+            'floatingNavMenuItemSortOrder' => Yii::t('ThiscoveryThemeModule.base', 'Floating bottom bar sort order'),
+            'hamburgerNavMenuItemIds' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu items'),
+            'hamburgerNavMenuItemSortOrder' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu sort order'),
+            'hamburgerAccountMenuItemIds' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger account items'),
+            'hamburgerCustomLinks' => Yii::t('ThiscoveryThemeModule.base', 'Custom hamburger links'),
+            'showProfileInFloatingNav' => Yii::t('ThiscoveryThemeModule.base', 'Show profile in floating bottom bar'),
+            'showLegalsInFloatingNav' => Yii::t('ThiscoveryThemeModule.base', 'Show Legals in floating bottom bar'),
             'floatingMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar background color'),
             'floatingMenuBackgroundOpacity' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar background opacity (0–100)'),
             'floatingMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar text color'),
             'floatingMenuActiveColor' => Yii::t('ThiscoveryThemeModule.base', 'Floating bar active item color'),
             'hideFloatingMenuItemLabels' => Yii::t('ThiscoveryThemeModule.base', 'Hide floating bar item labels (icons only)'),
-            'hideTextInBottomMenuItems' => Yii::t('ThiscoveryThemeModule.base', 'Hide Clean Theme bottom bar item labels (icons only)'),
+            'hideFloatingMenuOnScrollDown' => Yii::t('ThiscoveryThemeModule.base', 'Hide floating bar when scrolling down'),
             'mobileMenuBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel background color'),
             'mobileMenuTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger panel text color'),
             'mobileMenuFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Hamburger menu font size'),
@@ -921,6 +1430,27 @@ class ConfigForm extends Model
             'buttonSecondaryBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button border color'),
             'buttonSecondaryHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover background color'),
             'buttonSecondaryHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Secondary button hover text color'),
+            'accordionBorderColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion border color'),
+            'accordionBorderRadius' => Yii::t('ThiscoveryThemeModule.base', 'Accordion border radius'),
+            'accordionMarginBottom' => Yii::t('ThiscoveryThemeModule.base', 'Accordion spacing below'),
+            'accordionBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion background color'),
+            'accordionBoxShadow' => Yii::t('ThiscoveryThemeModule.base', 'Accordion shadow'),
+            'accordionHeaderBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header background color'),
+            'accordionHeaderTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header text color'),
+            'accordionHeaderFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header font size'),
+            'accordionHeaderFontWeight' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header font weight'),
+            'accordionHeaderPaddingY' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header vertical padding'),
+            'accordionHeaderPaddingX' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header horizontal padding'),
+            'accordionHeaderHoverBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header hover background color'),
+            'accordionHeaderHoverTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion header hover text color'),
+            'accordionHeaderOpenBackgroundColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion open header background color'),
+            'accordionHeaderOpenTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion open header text color'),
+            'accordionContentTextColor' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content text color'),
+            'accordionContentFontSize' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content font size'),
+            'accordionContentPadding' => Yii::t('ThiscoveryThemeModule.base', 'Accordion content padding'),
+            'accordionFaqTitleColor' => Yii::t('ThiscoveryThemeModule.base', 'FAQ section title color'),
+            'accordionFaqTitleFontSize' => Yii::t('ThiscoveryThemeModule.base', 'FAQ section title font size'),
+            'accordionEnableAnimation' => Yii::t('ThiscoveryThemeModule.base', 'Animate accordion when opening'),
         ];
     }
 
@@ -1013,14 +1543,20 @@ class ConfigForm extends Model
         $this->settings->set('footerBackgroundColor', $this->footerBackgroundColor);
         $this->settings->set('footerTextColor', $this->footerTextColor);
         $this->settings->set('mobileMenuStyle', $this->mobileMenuStyle);
-        $this->settings->set('bottomMenuBackgroundColor', $this->bottomMenuBackgroundColor);
-        $this->settings->set('bottomMenuTextColor', $this->bottomMenuTextColor);
+        $this->settings->setSerialized('floatingNavMenuItemIds', $this->floatingNavMenuItemIds);
+        $this->settings->setSerialized('floatingNavMenuItemSortOrder', $this->floatingNavMenuItemSortOrder);
+        $this->settings->setSerialized('hamburgerNavMenuItemIds', $this->hamburgerNavMenuItemIds);
+        $this->settings->setSerialized('hamburgerNavMenuItemSortOrder', $this->hamburgerNavMenuItemSortOrder);
+        $this->settings->setSerialized('hamburgerAccountMenuItemIds', $this->hamburgerAccountMenuItemIds);
+        $this->settings->setSerialized('hamburgerCustomLinks', $this->hamburgerCustomLinks);
+        $this->settings->set('showProfileInFloatingNav', (bool)$this->showProfileInFloatingNav);
+        $this->settings->set('showLegalsInFloatingNav', (bool)$this->showLegalsInFloatingNav);
         $this->settings->set('floatingMenuBackgroundColor', $this->floatingMenuBackgroundColor);
         $this->settings->set('floatingMenuTextColor', $this->floatingMenuTextColor);
         $this->settings->set('floatingMenuActiveColor', $this->floatingMenuActiveColor);
         $this->settings->set('floatingMenuBackgroundOpacity', (int)$this->floatingMenuBackgroundOpacity);
         $this->settings->set('hideFloatingMenuItemLabels', (bool)$this->hideFloatingMenuItemLabels);
-        $this->settings->set('hideTextInBottomMenuItems', (bool)$this->hideTextInBottomMenuItems);
+        $this->settings->set('hideFloatingMenuOnScrollDown', (bool)$this->hideFloatingMenuOnScrollDown);
         $this->settings->set('mobileMenuBackgroundColor', $this->mobileMenuBackgroundColor);
         $this->settings->set('mobileMenuTextColor', $this->mobileMenuTextColor);
         $this->settings->set('mobileMenuFontSize', $this->mobileMenuFontSize);
@@ -1045,6 +1581,27 @@ class ConfigForm extends Model
         $this->settings->set('buttonSecondaryBorderColor', $this->buttonSecondaryBorderColor);
         $this->settings->set('buttonSecondaryHoverBackgroundColor', $this->buttonSecondaryHoverBackgroundColor);
         $this->settings->set('buttonSecondaryHoverTextColor', $this->buttonSecondaryHoverTextColor);
+        $this->settings->set('accordionBorderColor', $this->accordionBorderColor);
+        $this->settings->set('accordionBorderRadius', $this->accordionBorderRadius);
+        $this->settings->set('accordionMarginBottom', $this->accordionMarginBottom);
+        $this->settings->set('accordionBackgroundColor', $this->accordionBackgroundColor);
+        $this->settings->set('accordionBoxShadow', $this->accordionBoxShadow);
+        $this->settings->set('accordionHeaderBackgroundColor', $this->accordionHeaderBackgroundColor);
+        $this->settings->set('accordionHeaderTextColor', $this->accordionHeaderTextColor);
+        $this->settings->set('accordionHeaderFontSize', $this->accordionHeaderFontSize);
+        $this->settings->set('accordionHeaderFontWeight', $this->accordionHeaderFontWeight);
+        $this->settings->set('accordionHeaderPaddingY', $this->accordionHeaderPaddingY);
+        $this->settings->set('accordionHeaderPaddingX', $this->accordionHeaderPaddingX);
+        $this->settings->set('accordionHeaderHoverBackgroundColor', $this->accordionHeaderHoverBackgroundColor);
+        $this->settings->set('accordionHeaderHoverTextColor', $this->accordionHeaderHoverTextColor);
+        $this->settings->set('accordionHeaderOpenBackgroundColor', $this->accordionHeaderOpenBackgroundColor);
+        $this->settings->set('accordionHeaderOpenTextColor', $this->accordionHeaderOpenTextColor);
+        $this->settings->set('accordionContentTextColor', $this->accordionContentTextColor);
+        $this->settings->set('accordionContentFontSize', $this->accordionContentFontSize);
+        $this->settings->set('accordionContentPadding', $this->accordionContentPadding);
+        $this->settings->set('accordionFaqTitleColor', $this->accordionFaqTitleColor);
+        $this->settings->set('accordionFaqTitleFontSize', $this->accordionFaqTitleFontSize);
+        $this->settings->set('accordionEnableAnimation', (bool)$this->accordionEnableAnimation);
         $this->settings->setSerialized('customCssRules', $this->customCssRules);
 
         // Persist in global design settings used by ThemeHelper build process.
@@ -1165,8 +1722,6 @@ class ConfigForm extends Model
             . '    --hh-background-color-page: ' . $this->backgroundColorPage . ';' . PHP_EOL
             . '    --hh-fixed-header-height: ' . ((int)$this->topBarHeight + self::TOP_BAR_BOTTOM_SPACING) . 'px;' . PHP_EOL
             . '    --hh-fixed-footer-height: 0px;' . PHP_EOL
-            . '    --yg-bottom-menu-bg: ' . $this->bottomMenuBackgroundColor . ';' . PHP_EOL
-            . '    --yg-bottom-menu-text: ' . $this->bottomMenuTextColor . ';' . PHP_EOL
             . '    --yg-floating-menu-bg: ' . $this->floatingMenuBackgroundColor . ';' . PHP_EOL
             . '    --yg-floating-menu-bg-opacity: ' . max(0, min(100, (int)$this->floatingMenuBackgroundOpacity)) . '%;' . PHP_EOL
             . '    --yg-floating-menu-bg-rgba: ' . $this->formatFloatingMenuBackgroundRgba() . ';' . PHP_EOL
@@ -1195,6 +1750,27 @@ class ConfigForm extends Model
             . '    --yg-button-secondary-border: ' . $this->buttonSecondaryBorderColor . ';' . PHP_EOL
             . '    --yg-button-secondary-hover-bg: ' . $this->buttonSecondaryHoverBackgroundColor . ';' . PHP_EOL
             . '    --yg-button-secondary-hover-text: ' . $this->buttonSecondaryHoverTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-border-color: ' . $this->accordionBorderColor . ';' . PHP_EOL
+            . '    --yg-accordion-border-radius: ' . (int)$this->accordionBorderRadius . 'px;' . PHP_EOL
+            . '    --yg-accordion-margin-bottom: ' . (int)$this->accordionMarginBottom . 'px;' . PHP_EOL
+            . '    --yg-accordion-bg: ' . $this->accordionBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-shadow: ' . $this->accordionBoxShadow . ';' . PHP_EOL
+            . '    --yg-accordion-header-bg: ' . $this->accordionHeaderBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-text: ' . $this->accordionHeaderTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-font-size: ' . (int)$this->accordionHeaderFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-font-weight: ' . (int)$this->accordionHeaderFontWeight . ';' . PHP_EOL
+            . '    --yg-accordion-header-padding-y: ' . (int)$this->accordionHeaderPaddingY . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-padding-x: ' . (int)$this->accordionHeaderPaddingX . 'px;' . PHP_EOL
+            . '    --yg-accordion-header-hover-bg: ' . $this->accordionHeaderHoverBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-hover-text: ' . $this->accordionHeaderHoverTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-open-bg: ' . $this->accordionHeaderOpenBackgroundColor . ';' . PHP_EOL
+            . '    --yg-accordion-header-open-text: ' . $this->accordionHeaderOpenTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-content-text: ' . $this->accordionContentTextColor . ';' . PHP_EOL
+            . '    --yg-accordion-content-font-size: ' . (int)$this->accordionContentFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-content-padding: ' . (int)$this->accordionContentPadding . 'px;' . PHP_EOL
+            . '    --yg-accordion-faq-title-color: ' . $this->accordionFaqTitleColor . ';' . PHP_EOL
+            . '    --yg-accordion-faq-title-font-size: ' . (int)$this->accordionFaqTitleFontSize . 'px;' . PHP_EOL
+            . '    --yg-accordion-open-animation: ' . ((bool)$this->accordionEnableAnimation ? 'ygAccordionFadeIn 0.3s ease-in-out' : 'none') . ';' . PHP_EOL
             . '}' . PHP_EOL . PHP_EOL
             . 'body {' . PHP_EOL
             . '    font-family: var(--yg-font-family);' . PHP_EOL
@@ -1374,11 +1950,6 @@ class ConfigForm extends Model
             . '        --hh-fixed-footer-height: ' . (self::FLOATING_BAR_HEIGHT_SM + 2) . 'px;' . PHP_EOL
             . '    }' . PHP_EOL
             . '}' . PHP_EOL
-            . '@media (max-width: 575.98px) {' . PHP_EOL
-            . '    body.hh-yg-mobile-menu-bottom-bar {' . PHP_EOL
-            . '        --hh-fixed-footer-height: ' . (self::BOTTOM_BAR_HEIGHT_SM + 2) . 'px;' . PHP_EOL
-            . '    }' . PHP_EOL
-            . '}' . PHP_EOL
             . $endMarker;
 
         $globalSettings = Yii::$app->settings;
@@ -1391,8 +1962,55 @@ class ConfigForm extends Model
             $customScss = preg_replace($pattern, '', $customScss) ?? $customScss;
         }
         $customScss = trim($customScss);
+        $customScss = $this->stripLegacyAccordionScss($customScss);
         $customScss = ($customScss === '' ? '' : $customScss . PHP_EOL . PHP_EOL) . $generatedScss . PHP_EOL;
         $globalSettings->set('themeCustomScss', $customScss);
+    }
+
+    /**
+     * Remove legacy hardcoded FAQ/TinyMCE accordion CSS from pasted custom SCSS.
+     * Those rules override the configurable accordion styles in _accordions.scss.
+     */
+    private function stripLegacyAccordionScss(string $scss): string
+    {
+        if ($scss === '') {
+            return $scss;
+        }
+
+        $patterns = [
+            '/\/\* FAQ Accordion Styling.*?(?=\/\* Rounded Edges|\/\* Imported compatibility|\z)/s',
+            '/\/\* TinyMCE Accordion Styling.*?(?=\/\* Rounded Edges|\/\* Animation for|\/\* Imported compatibility|\z)/s',
+            '/@keyframes\s+fadeIn\s*\{[^}]*\}/s',
+        ];
+
+        foreach ($patterns as $pattern) {
+            $scss = preg_replace($pattern, '', $scss) ?? $scss;
+        }
+
+        $selectors = [
+            '.faq-accordion',
+            '.faq-title',
+            '.faq-item',
+            '.faq-question',
+            'details.mce-accordion',
+            'body details.mce-accordion',
+            '.layout-content-container details.mce-accordion',
+            '.panel-body details.mce-accordion',
+            '.richtext details.mce-accordion',
+            '.stream-entry details.mce-accordion',
+            '.mce-content-body details.mce-accordion',
+        ];
+
+        foreach ($selectors as $selector) {
+            $pattern = '/' . preg_quote($selector, '/') . '(?:[^{,]*,(?:[^{]+)?)*\s*\{(?:[^{}]*|\{[^{}]*\})*\}/s';
+            $previous = null;
+            while ($previous !== $scss) {
+                $previous = $scss;
+                $scss = preg_replace($pattern, '', $scss) ?? $scss;
+            }
+        }
+
+        return trim(preg_replace("/\n{3,}/", "\n\n", $scss) ?? $scss);
     }
 
     private function renderCustomCssRulesScss(): string

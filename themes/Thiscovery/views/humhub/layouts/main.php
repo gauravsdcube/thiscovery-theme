@@ -15,6 +15,7 @@ use humhub\modules\thiscoveryTheme\assets\ThiscoveryTopNavigationAsset;
 use humhub\modules\thiscoveryTheme\models\ConfigForm;
 use humhub\modules\thiscoveryTheme\Module;
 use humhub\modules\user\widgets\AccountTopMenu;
+use humhub\modules\user\widgets\Image;
 use humhub\widgets\NotificationArea;
 use humhub\widgets\SiteLogo;
 use humhub\widgets\TopMenu;
@@ -26,9 +27,10 @@ use Yii;
 
 /** @var Module|null $module */
 $module = Yii::$app->getModule('thiscovery-theme');
-$mobileMenuStyle = (string)($module?->settings->get('mobileMenuStyle', ConfigForm::MOBILE_MENU_STYLE_HAMBURGER) ?? ConfigForm::MOBILE_MENU_STYLE_HAMBURGER);
+$topNavigationConfig = ConfigForm::getTopNavigationJsConfig();
+$mobileMenuStyle = (string)$topNavigationConfig['mobileMenuStyle'];
 $hideFloatingMenuItemLabels = (bool)($module?->settings->get('hideFloatingMenuItemLabels', false) ?? false);
-$hideTextInBottomMenuItems = (bool)($module?->settings->get('hideTextInBottomMenuItems', false) ?? false);
+$showProfileInFloatingNav = (bool)$topNavigationConfig['showProfileInFloatingNav'];
 $mobileMenuHighlightActive = (bool)($module?->settings->get('mobileMenuHighlightActive', false) ?? false);
 
 $bodyClasses = DeviceDetectorHelper::getBodyClasses();
@@ -40,18 +42,13 @@ if ($mobileMenuHighlightActive) {
 if ($hideFloatingMenuItemLabels && $mobileMenuStyle === ConfigForm::MOBILE_MENU_STYLE_FLOATING_BAR) {
     $bodyClasses[] = 'hh-yg-hide-floating-menu-texts';
 }
-if ($hideTextInBottomMenuItems && $mobileMenuStyle === ConfigForm::MOBILE_MENU_STYLE_BOTTOM_BAR) {
-    $bodyClasses[] = 'hh-yg-hide-bottom-menu-texts';
-}
 if (Yii::$app->user->isGuest) {
     $bodyClasses[] = 'hh-yg-is-guest';
 }
 
 AppAsset::register($this);
 ThiscoveryTopNavigationAsset::register($this);
-$this->registerJsConfig('thiscoveryTheme.topNavigation', [
-    'mobileMenuStyle' => $mobileMenuStyle,
-]);
+$this->registerJsConfig('thiscoveryTheme.topNavigation', $topNavigationConfig);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -77,10 +74,48 @@ $this->registerJsConfig('thiscoveryTheme.topNavigation', [
             <ul class="flex-grow-1 nav" id="top-menu-nav">
                 <?= Chooser::widget() ?>
                 <?= TopMenu::widget() ?>
+                <?php if (in_array($mobileMenuStyle, [ConfigForm::MOBILE_MENU_STYLE_FLOATING_BAR, ConfigForm::MOBILE_MENU_STYLE_HAMBURGER], true)): ?>
+                    <li class="nav-item top-menu-item top-menu-home-item tc-mobile-only-nav-item d-md-none" id="top-menu-home-item" data-menu-id="home">
+                        <a
+                            href="<?= Html::encode(Yii::$app->homeUrl) ?>"
+                            class="nav-link"
+                            title="<?= Yii::t('ThiscoveryThemeModule.base', 'Home') ?>"
+                        >
+                            <i class="fa fa-home" aria-hidden="true"></i><br>
+                            <span class="tc-floating-menu-label"><?= Yii::t('ThiscoveryThemeModule.base', 'Home') ?></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if (
+                    !Yii::$app->user->isGuest
+                    && $mobileMenuStyle === ConfigForm::MOBILE_MENU_STYLE_FLOATING_BAR
+                    && $showProfileInFloatingNav
+                ): ?>
+                    <?php $profileUser = Yii::$app->user->getIdentity(); ?>
+                    <li class="nav-item top-menu-item top-menu-profile-item tc-mobile-only-nav-item d-md-none" id="top-menu-profile-item">
+                        <a
+                            href="<?= $profileUser->createUrl('/user/profile/home') ?>"
+                            class="nav-link"
+                            data-menu-id="account-profile"
+                            title="<?= Yii::t('base', 'My Profile') ?>"
+                        >
+                            <?= Image::widget([
+                                'user' => $profileUser,
+                                'width' => 28,
+                                'height' => 28,
+                                'link' => false,
+                                'showTooltip' => false,
+                                'hideOnlineStatus' => true,
+                            ]) ?>
+                            <span class="tc-floating-menu-label"><?= Yii::t('base', 'My Profile') ?></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </nav>
 
         <div id="top-menu-mobile-panel" class="top-menu-mobile-panel">
+            <ul id="top-menu-mobile-nav-slot" class="nav top-menu-mobile-nav-slot" aria-label="<?= Yii::t('base', 'Menu'); ?>"></ul>
             <div id="top-menu-mobile-account-slot" class="top-menu-mobile-account-slot"></div>
         </div>
 

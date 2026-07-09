@@ -7,6 +7,8 @@
  */
 
 use humhub\helpers\Html;
+use humhub\modules\thiscoveryTheme\libs\MobileMenuHelper;
+use yii\helpers\Url;
 
 /* @var $this \humhub\components\View */
 /* @var $menu \humhub\widgets\TopMenu */
@@ -15,12 +17,20 @@ use humhub\helpers\Html;
 ?>
 
 <?php foreach ($entries as $entry) : ?>
-    <li class="nav-item top-menu-item">
+    <?php
+    $menuItemId = $entry instanceof \humhub\modules\ui\menu\MenuLink
+        ? MobileMenuHelper::resolveTopMenuItemId($entry)
+        : $entry->getId();
+    ?>
+    <li class="nav-item top-menu-item"<?= $menuItemId ? ' data-menu-id="' . Html::encode($menuItemId) . '"' : '' ?>>
         <?php
         $options = $entry->getHtmlOptions();
         $class = $options['class'] ?? '';
         $class = is_array($class) ? implode(' ', $class) : $class;
         $options['class'] = trim('nav-link ' . ($entry->getIsActive() ? 'active ' : '') . $class);
+        if ($menuItemId && empty($options['data-menu-id'])) {
+            $options['data-menu-id'] = $menuItemId;
+        }
         ?>
         <?= Html::a(
             $entry->getIcon() . '<br />' . $entry->getLabel(),

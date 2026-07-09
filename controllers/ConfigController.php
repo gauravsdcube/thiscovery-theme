@@ -11,6 +11,7 @@ namespace humhub\modules\thiscoveryTheme\controllers;
 use humhub\helpers\ThemeHelper;
 use humhub\modules\admin\components\Controller;
 use humhub\modules\admin\permissions\ManageSettings;
+use humhub\modules\thiscoveryTheme\libs\MobileMenuHelper;
 use humhub\modules\thiscoveryTheme\models\ConfigForm;
 use humhub\modules\thiscoveryTheme\models\ThemeImportForm;
 use Throwable;
@@ -47,7 +48,12 @@ class ConfigController extends Controller
                         return $this->refresh();
                     }
                 } else {
-                    $this->view->error(Yii::t('ThiscoveryThemeModule.base', 'Could not save theme settings.'));
+                    $message = Yii::t('ThiscoveryThemeModule.base', 'Could not save theme settings.');
+                    $errors = $model->getFirstErrors();
+                    if ($errors !== []) {
+                        $message .= ' ' . implode(' ', $errors);
+                    }
+                    $this->view->error($message);
                 }
             } catch (Throwable $e) {
                 $this->view->error($e->getMessage());
@@ -57,6 +63,8 @@ class ConfigController extends Controller
         return $this->render('index', [
             'model' => $model,
             'importModel' => $importModel,
+            'topMenuItems' => MobileMenuHelper::collectConfigurableTopMenuItems(),
+            'accountMenuItems' => MobileMenuHelper::collectAccountMenuItems(),
         ]);
     }
 
