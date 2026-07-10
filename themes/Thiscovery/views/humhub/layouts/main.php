@@ -15,7 +15,6 @@ use humhub\modules\thiscoveryTheme\assets\ThiscoveryTopNavigationAsset;
 use humhub\modules\thiscoveryTheme\models\ConfigForm;
 use humhub\modules\thiscoveryTheme\Module;
 use humhub\modules\user\widgets\AccountTopMenu;
-use humhub\modules\user\widgets\Image;
 use humhub\widgets\NotificationArea;
 use humhub\widgets\SiteLogo;
 use humhub\widgets\TopMenu;
@@ -99,13 +98,13 @@ $this->registerJsConfig('thiscoveryTheme.topNavigation', $topNavigationConfig);
                             data-menu-id="account-profile"
                             title="<?= Yii::t('base', 'My Profile') ?>"
                         >
-                            <?= Image::widget([
-                                'user' => $profileUser,
+                            <?= Html::img($profileUser->getProfileImage()->getUrl(), [
+                                'class' => 'rounded',
                                 'width' => 28,
                                 'height' => 28,
-                                'link' => false,
-                                'showTooltip' => false,
-                                'hideOnlineStatus' => true,
+                                'alt' => Yii::t('base', 'Profile picture of {displayName}', [
+                                    'displayName' => Html::encode($profileUser->displayName),
+                                ]),
                             ]) ?>
                             <span class="tc-floating-menu-label"><?= Yii::t('base', 'My Profile') ?></span>
                         </a>
