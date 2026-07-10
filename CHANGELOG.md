@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3.1 — 2026-07-10
+
+### Fixed
+
+- **Floating profile link** — tapping My Profile no longer opens the Popover VCard overlay on mobile; the nav avatar no longer uses `data-contentcontainer-id`, which was triggering hover-card behaviour on touch.
+
 ## 2.3.0 — 2026-07-09
 
 Mobile navigation overhaul: configurable item assignment, custom hamburger links, and Menu Manager compatibility.
